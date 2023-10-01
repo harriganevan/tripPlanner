@@ -1,5 +1,5 @@
 import { MapContainer, TileLayer, useMap } from 'react-leaflet'
-import "leaflet/dist/leaflet.css"
+import LocationMarkers from './LocationMarker.jsx'
 import "./Map.css"
 
 function Map() {
@@ -9,6 +9,7 @@ function Map() {
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
+      <LocationMarkers />
     </MapContainer>
   );
 }
