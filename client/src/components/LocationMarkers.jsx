@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useMapEvent } from 'react-leaflet/hooks'
 import { Marker } from 'react-leaflet'
 
