@@ -1,4 +1,5 @@
 function Destinations({ points }){
+
     return (
         <div className='col-sm-3'>
             <h1>destinations</h1>
