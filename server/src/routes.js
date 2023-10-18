@@ -11,16 +11,16 @@ router.get('/', getMain);
 router.post("/", createTrip);
 
 //get all trips
-router.get('/trips', getTrips);
+router.get('/api/trips', getTrips);
 
 //main page with trip loaded
-router.get('/:id', getTrip);
+router.get('/api/:id', getTrip);
 
 //delete specific trip
-router.delete('/:id', deleteTrip);
+router.delete('/api/:id', deleteTrip);
 
 //update specific trip
-router.patch('/:id', updateTrip);
+router.patch('/api/:id', updateTrip);
 
 //user crap 
 

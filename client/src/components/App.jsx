@@ -1,22 +1,24 @@
-import { useState } from 'react';
-import Map from './Map.jsx'
-import Destinations from './Destinations.jsx';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Home from '../pages/Home.jsx'
+import Header from '../components/Header.jsx';
+import Trips from '../pages/Trips.jsx'
 
 function App() {
 
-  const [points, setPoints] = useState([]);
-
-  //destinations useState hook - put inside Destinations component if save button is there
-
   return (
-    <>
-      {/* header */}
-      <div className='row'>
-        <Map points={points} setPoints={setPoints} />
-        <Destinations points={points} />
-      </div>
-      {/* save button - maybe inside Destinations component */}
-    </>
+    <BrowserRouter>
+      <Header />
+      <Routes>
+        <Route
+          path='/'
+          element={<Home />}
+        />
+        <Route
+          path='/trips'
+          element={<Trips />}
+        />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

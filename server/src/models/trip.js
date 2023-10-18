@@ -8,15 +8,13 @@ const TripSchema = new Schema({
         {
             latlng: [Number],
             days: Number,
-            details: {
-                notes: String,
-                places: [
-                    {
-                        img: String,
-                        text: String
-                    }
-                ]
-            }
+            notes: String,
+            places: [
+                {
+                    img: String,
+                    text: String
+                }
+            ]
         }
     ]
 });

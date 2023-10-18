@@ -4,10 +4,42 @@
     padding: 0;
 }
 
+html, body {height: 100%; overflow: hidden}
+
 #root {
     height: 100vh;
 }
 
 .leaflet-container {
-    height: 75vh;
+    height: 94vh;
 }
+
+.destinations {
+    height: 94vh;
+}
+
+/* .destinations-header {
+    padding-right: 50px;
+} */
+
+.popper{
+    z-index: 9999;
+    height: 100%;
+    padding-top: 55px; /* the height of the header */
+    width: 18vw;
+}
+
+.box {
+    height: 100%;
+    margin-right: 1.8rem;
+}
+
+@media screen and (max-width: 768px) {
+    .leaflet-container {
+        height: 50vh;
+    }
+    .destinations {
+        height: 42vh;
+    }
+  }
+  
