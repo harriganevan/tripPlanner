@@ -2,11 +2,10 @@ import { useState, useEffect } from 'react';
 import { Popper, Box, Button, ClickAwayListener } from '@mui/material';
 import Details from './Details';
 
-function Destination({ point, destinations, setDestinations }) {
+function Destination({ point, points, setPoints, destinations, setDestinations }) {
 
     const placement = (window.innerWidth < 769 ? 'right' : 'left'); //make popper appear on right for mobile
 
-    //combine these into one state object {notes: , days: }?
     const [notes, setNotes] = useState('');
     const [days, setDays] = useState(1);
     const [places, setPlaces] = useState([]);
@@ -17,12 +16,10 @@ function Destination({ point, destinations, setDestinations }) {
 
         var seen = false;
 
-        //if point.myID is in destinations
         const newDestinations = destinations.map((destination) => {
-            if (destination.ID === point.myId) {
+            if (destination.latlng[0] === point.lat && destination.latlng[1] === point.lng) {
                 seen = true;
                 return {
-                    ID: point.myId,
                     latlng: [point.lat, point.lng],
                     days: days,
                     notes: notes,
@@ -38,7 +35,6 @@ function Destination({ point, destinations, setDestinations }) {
             setDestinations(newDestinations);
         } else { //new point
             setDestinations([...destinations, {
-                ID: point.myId,
                 latlng: [point.lat, point.lng],
                 days: days,
                 notes: notes,
@@ -73,6 +69,21 @@ function Destination({ point, destinations, setDestinations }) {
                     </Box>
                 </ClickAwayListener>
             </Popper>
+            <Button aria-describedby={id} type="button" onClick={() => {
+                setDestinations(
+                    destinations.filter((destination, index) =>
+                        !(destination.latlng[0] === point.lat && destination.latlng[1] === point.lng)
+                    )
+                );
+                setPoints(
+                    points.filter((points, index) =>
+                        !(points.lat === point.lat && points.lng === point.lng)
+                    )
+                );
+                console.log(points)
+            }}>
+                delete destination
+            </Button>
         </li>
     );
 

@@ -6,14 +6,12 @@ function Home() {
 
     const [points, setPoints] = useState([]);
 
-    //destinationDetails object for state? - put in destinations
-
     return (
         <>
-            
+
             <div className='row'>
                 <Map points={points} setPoints={setPoints} />
-                <Destinations points={points} />
+                <Destinations points={points} setPoints={setPoints} />
             </div>
 
         </>
