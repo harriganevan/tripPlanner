@@ -10,7 +10,8 @@ function Destination({ point, points, setPoints, destinations, setDestinations }
     const [nearby, setNearby] = useState([]); //all nearby attractions for destination
     const [nearbyAdded, setNearbyAdded] = useState([]); //attractions added to destination
     const [foundNearby, setFoundNearby] = useState(false); //tracks if api call has already been made for this destination
-    const [displayedNearby, setDisplayedNearby] = useState([]); //tracks all seen attractions - should be image and description in each array element = {img: ..., text: ...}
+    const [displayedNearby, setDisplayedNearby] = useState([]); //tracks attractions to display
+    const [offset, setOffset] = useState(0)
 
     //states for Destination
     const [notes, setNotes] = useState(''); //custom notes in textbox
@@ -18,6 +19,10 @@ function Destination({ point, points, setPoints, destinations, setDestinations }
     const [places, setPlaces] = useState([]); //nearby attractions added - should be image and description in each array element = {img: ..., text: ...}
 
     const [anchorEl, setAnchorEl] = useState(null); //anchor for poppers
+    
+    var displayedAttractions = [];
+
+    console.log(displayedNearby)
 
     useEffect(() => {
 
@@ -51,42 +56,56 @@ function Destination({ point, points, setPoints, destinations, setDestinations }
 
     }, [days, notes, places]);
 
-    const pageLength = 5; // number of objects per page
+    const removeDuplicates = (destinations) => {
+        const set = new Set();
 
-    const lng = point.lng; // place longitude
-    const lat = point.lat; // place latitude
+        let noDuplicates = [];
+
+        for(let i = 0; i < destinations.length; i++){
+            if(!set.has(destinations[i].wikidata)) {
+                noDuplicates.push(destinations[i]);
+                set.add(destinations[i].wikidata);
+            }
+        }
+
+        return noDuplicates;
+    }
 
     const handleClickNearby = async () => {
 
         if (!foundNearby) {
             console.log('sending api request');
-            const response = await fetch(`http://localhost:5000/api/otmAPI/radius/radius=5000&lon=${lng}&lat=${lat}&rate=3&limit=200&format=json`);
+            const response = await fetch(`http://localhost:5000/api/otmAPI/radius/radius=5000&lon=${point.lng}&lat=${point.lat}&rate=3&limit=200&format=json`);
             const nearbyAttractions = await response.json();
 
             if (response.ok) {
-                console.log(nearbyAttractions);
-                setNearby(nearbyAttractions);
+                var nearbyNoDupes = removeDuplicates(nearbyAttractions);
+                console.log(nearbyNoDupes)
+                setNearby(nearbyNoDupes);
                 setFoundNearby(true);
             }
 
-            // getAttractionDetails(json[0].wikidata);
-            if(nearbyAttractions.length > 5){
-                getAttractionDetails(nearbyAttractions[0].wikidata)
-                .then(getAttractionDetails(nearbyAttractions[1].wikidata)
-                .then(getAttractionDetails(nearbyAttractions[2].wikidata)
-                .then(getAttractionDetails(nearbyAttractions[3].wikidata)
-                .then(getAttractionDetails(nearbyAttractions[4].wikidata)))));
+            if (nearbyNoDupes.length > 5) {
+                await (getAttractionDetails(nearbyNoDupes[0].wikidata, nearbyNoDupes[0].name));
+                await (getAttractionDetails(nearbyNoDupes[1].wikidata, nearbyNoDupes[1].name));
+                await (getAttractionDetails(nearbyNoDupes[2].wikidata, nearbyNoDupes[2].name));
+                await (getAttractionDetails(nearbyNoDupes[3].wikidata, nearbyNoDupes[3].name));
+                await (getAttractionDetails(nearbyNoDupes[4].wikidata, nearbyNoDupes[4].name));
+                await (setDisplayedNearby(displayedAttractions));
             }
         }
 
         console.log(nearby);
+        console.log(displayedNearby);
     }
 
     //make async function that gets image - call it 5 times from somewhere else
-    const getAttractionDetails = async (wikidata) => {
+    const getAttractionDetails = async (wikidata, name) => {
+        console.log('sending api request');
         const response = await fetch(`http://localhost:5000/api/details/${wikidata}`);
-        const json = await response.json();
-        console.log(json);
+        let json = await response.json();
+        json = {...json, name: name};
+        displayedAttractions.push(json);
     }
 
     const handleClick = (event) => {
@@ -110,7 +129,7 @@ function Destination({ point, points, setPoints, destinations, setDestinations }
                 <ClickAwayListener onClickAway={handleClickAway}>
                     <Box sx={{ border: 1, p: 1, bgcolor: 'background.paper' }} className="box">
                         add stuff to your {point.lat + ", " + point.lng} here <br /><br />
-                        <Details notes={notes} setNotes={setNotes} point={point} handleClickNearby={handleClickNearby} nearby={nearby} />
+                        <Details notes={notes} setNotes={setNotes} point={point} handleClickNearby={handleClickNearby} nearby={displayedNearby} />
                     </Box>
                 </ClickAwayListener>
             </Popper>

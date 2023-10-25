@@ -4,8 +4,6 @@ import Attraction from './Attraction';
 
 function Details({ notes, setNotes, point, handleClickNearby, nearby }) {
 
-    //add attractions prop
-
     const placement = (window.innerWidth < 769 ? 'right' : 'left'); //make popper appear on right for mobile
 
     const [anchorEl, setAnchorEl] = useState(null); //anchor for poppers
@@ -34,17 +32,16 @@ function Details({ notes, setNotes, point, handleClickNearby, nearby }) {
             />
             <br />
             <Button aria-describedby={id} type="button" onClick={handleClick}>find nearby attractions</Button>
-            {/* nearbyAdded state from Destination */}
             <Popper id={id} open={open} anchorEl={anchorEl} placement={placement} className='popper'>
                 <ClickAwayListener onClickAway={handleClickAway}>
                     <Box sx={{ border: 1, p: 1, bgcolor: 'background.paper' }} className="box-attractions">
                         <div className='col-sm-3 attractions overflow-auto' style={{width: '100%'}}>
+                            {(nearby.length === 0 ? 'loading...' : null)}
                             <ul className='list-group list-group-numbered'>
-                                <Attraction img={'https://upload.wikimedia.org/wikipedia/commons/0/01/Prudential_Tower_Panorama.jpg'} descr={'this is a place'} name={'name'} />
-                                <Attraction img={'https://upload.wikimedia.org/wikipedia/commons/8/80/Alexandria_Torpedo_Factory8.jpg'} descr={'this is a place'} name={'name'} />
-                                <Attraction img={'https://upload.wikimedia.org/wikipedia/commons/8/80/Alexandria_Torpedo_Factory8.jpg'} descr={'this is a place'} name={'name'} />
-                                <Attraction img={'https://upload.wikimedia.org/wikipedia/commons/8/80/Alexandria_Torpedo_Factory8.jpg'} descr={'this is a place'} name={'name'} />
-                                <Attraction img={'https://upload.wikimedia.org/wikipedia/commons/8/80/Alexandria_Torpedo_Factory8.jpg'} descr={'this is a place'} name={'name'} />
+                                {nearby.map((attraction, index) => 
+                                    <Attraction key={attraction.img + index} img={attraction.img} descr={attraction.description} name={attraction.name} />
+                                )}
+
                             </ul>
                         </div>
                     </Box>
