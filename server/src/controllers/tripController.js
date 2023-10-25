@@ -1,5 +1,7 @@
 import Trip from '../models/trip.js';
 import mongoose from 'mongoose';
+import apiGet from '../otmAPI.js';
+import md5 from 'blueimp-md5';
 
 //get main page
 const getMain = async (req, res) => {
@@ -21,7 +23,7 @@ const getTrip = async (req, res) => {
     }
 
     const trip = await Trip.findById(id);
-    
+
     if (!trip) {
         return res.json({ error: "trip not found" });
     }
@@ -79,4 +81,47 @@ const updateTrip = async (req, res) => {
 
 }
 
-export { getMain, createTrip, getTrips, getTrip, deleteTrip, updateTrip }
+//get opentripmap api response
+const getOTMResult = async (req, res) => {
+    const { method, query } = req.params;
+
+    apiGet(method, query).then(function (data) {
+        res.json(data);
+    })
+
+}
+
+//responds with {imgURL: ..., description: ...} given wikidata ID
+const getAttractionDetails = async (req, res) => {
+    const { wikidata } = req.params;
+
+    const imageResponse = await fetch(`https://www.wikidata.org/w/api.php?action=wbgetclaims&entity=${wikidata}&property=P18&format=json`);
+    const imageJson = await imageResponse.json();
+    var imageURL;
+    if (imageJson.claims && imageJson.claims.P18) {
+        const imageNameNoSpace = (imageJson.claims.P18[0].mainsnak.datavalue.value).replace(/ /g, "_");
+        const hashedImage = md5(imageNameNoSpace);
+        imageURL = `https://upload.wikimedia.org/wikipedia/commons/${hashedImage[0]}/${hashedImage.substring(0, 2)}/${imageNameNoSpace}`;
+    } else {
+        imageURL = `no image available`;
+    }
+
+    const titleResponse = await fetch(`https://www.wikidata.org/w/api.php?action=wbgetentities&ids=${wikidata}&props=sitelinks&format=json`);
+    const titleJson = await titleResponse.json();
+    var description;
+    if (titleJson.entities[wikidata].sitelinks.enwiki) {
+        const titleResponseNoSpace = (titleJson.entities[wikidata].sitelinks.enwiki.title).replace(/ /g, "_");
+        const descriptionResponse = await fetch(`https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro&explaintext&redirects=1&titles=${titleResponseNoSpace}`);
+        const descriptionJson = await descriptionResponse.json();
+        const pageid = Object.keys(descriptionJson.query.pages)[0];
+        description = descriptionJson.query.pages[pageid].extract;
+    } else {
+        description = "no description available";
+    }
+
+    const value = { img: imageURL, description: description };
+
+    res.json(value);
+}
+
+export { getMain, createTrip, getTrips, getTrip, deleteTrip, updateTrip, getOTMResult, getAttractionDetails }

@@ -18,9 +18,9 @@ html, body {height: 100%; overflow: hidden}
     height: 94vh;
 }
 
-/* .destinations-header {
-    padding-right: 50px;
-} */
+.attractions {
+    height: 94vh;
+}
 
 .popper{
     z-index: 9999;
@@ -32,6 +32,11 @@ html, body {height: 100%; overflow: hidden}
 .box {
     height: 100%;
     margin-right: 1.8rem;
+}
+
+.box-attractions {
+    height: 100%;
+    margin-right: .5rem;
 }
 
 @media screen and (max-width: 768px) {

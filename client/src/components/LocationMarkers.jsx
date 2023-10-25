@@ -18,7 +18,6 @@ function LocationMarkers({ points, setPoints }) {
       if (!containsObject(e.latlng, points)) {
         setPoints([...points, e.latlng]);
       }
-
     }
   });
 
