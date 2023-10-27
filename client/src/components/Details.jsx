@@ -2,7 +2,7 @@ import { TextField, Button, Popper, Box, ClickAwayListener } from '@mui/material
 import { useState, useEffect } from 'react';
 import Attraction from './Attraction';
 
-function Details({ notes, setNotes, point, handleClickNearby, nearby }) {
+function Details({ notes, setNotes, handleClickNearby, nearby, nearbyAdded, handleClickNext, handleClickPrev, addToDestination }) {
 
     const placement = (window.innerWidth < 769 ? 'right' : 'left'); //make popper appear on right for mobile
 
@@ -32,16 +32,26 @@ function Details({ notes, setNotes, point, handleClickNearby, nearby }) {
             />
             <br />
             <Button aria-describedby={id} type="button" onClick={handleClick}>find nearby attractions</Button>
+            <div className='col-sm-3 attractions overflow-auto' style={{ width: '100%' }}>
+                <ul className='list-group list-group-numbered'>
+                    {nearbyAdded.map((attraction, index) =>
+                        <Attraction key={attraction.img + index} attraction={attraction} addToDestination={addToDestination} added={true} />
+                    )}
+                </ul>
+            </div>
             <Popper id={id} open={open} anchorEl={anchorEl} placement={placement} className='popper'>
                 <ClickAwayListener onClickAway={handleClickAway}>
                     <Box sx={{ border: 1, p: 1, bgcolor: 'background.paper' }} className="box-attractions">
-                        <div className='col-sm-3 attractions overflow-auto' style={{width: '100%'}}>
+                        <div className='d-flex justify-content-between'>
+                            <Button onClick={handleClickPrev}>previous</Button>
+                            <Button onClick={handleClickNext}>next</Button>
+                        </div>
+                        <div className='col-sm-3 attractions overflow-auto' style={{ width: '100%' }}>
                             {(nearby.length === 0 ? 'loading...' : null)}
                             <ul className='list-group list-group-numbered'>
-                                {nearby.map((attraction, index) => 
-                                    <Attraction key={attraction.img + index} img={attraction.img} descr={attraction.description} name={attraction.name} />
+                                {nearby.map((attraction, index) =>
+                                    <Attraction key={attraction.img + index} attraction={attraction} addToDestination={addToDestination} added={false} />
                                 )}
-
                             </ul>
                         </div>
                     </Box>

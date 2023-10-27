@@ -6,6 +6,8 @@ function Destinations({ points, setPoints }) {
 
     const [destinations, setDestinations] = useState([]);
 
+    console.log(destinations)
+
     return (
         <div className='col-sm-3 destinations overflow-auto'>
             <div className='d-flex justify-content-between'>

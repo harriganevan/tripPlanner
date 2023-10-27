@@ -8,18 +8,17 @@ function Destination({ point, points, setPoints, destinations, setDestinations }
 
     //states for finding and adding nearby attractions
     const [nearby, setNearby] = useState([]); //all nearby attractions for destination
-    const [nearbyAdded, setNearbyAdded] = useState([]); //attractions added to destination
-    const [foundNearby, setFoundNearby] = useState(false); //tracks if api call has already been made for this destination
     const [displayedNearby, setDisplayedNearby] = useState([]); //tracks attractions to display
+    const [foundNearby, setFoundNearby] = useState(false); //tracks if api call has already been made for this destination
     const [offset, setOffset] = useState(0)
 
     //states for Destination
     const [notes, setNotes] = useState(''); //custom notes in textbox
     const [days, setDays] = useState(1); //how many days at destination
-    const [places, setPlaces] = useState([]); //nearby attractions added - should be image and description in each array element = {img: ..., text: ...}
+    const [nearbyAdded, setNearbyAdded] = useState([]); //attractions added to destination
 
     const [anchorEl, setAnchorEl] = useState(null); //anchor for poppers
-    
+
     var displayedAttractions = [];
 
     console.log(displayedNearby)
@@ -35,7 +34,7 @@ function Destination({ point, points, setPoints, destinations, setDestinations }
                     latlng: [point.lat, point.lng],
                     days: days,
                     notes: notes,
-                    places: places,
+                    places: nearbyAdded,
                 }
             }
             else {
@@ -50,25 +49,43 @@ function Destination({ point, points, setPoints, destinations, setDestinations }
                 latlng: [point.lat, point.lng],
                 days: days,
                 notes: notes,
-                places: places,
+                places: nearbyAdded,
             }]);
         }
 
-    }, [days, notes, places]);
+    }, [days, notes, nearbyAdded]);
 
     const removeDuplicates = (destinations) => {
         const set = new Set();
 
         let noDuplicates = [];
 
-        for(let i = 0; i < destinations.length; i++){
-            if(!set.has(destinations[i].wikidata)) {
+        for (let i = 0; i < destinations.length; i++) {
+            if (destinations[i].wikidata && !set.has(destinations[i].wikidata)) {
                 noDuplicates.push(destinations[i]);
                 set.add(destinations[i].wikidata);
             }
         }
 
         return noDuplicates;
+    }
+
+    const getFirstNearbyPage = async (nearbyNoDupes) => {
+        for (let i = 0; i < 5; i++) {
+            if (nearbyNoDupes[offset + i]) {
+                await (getAttractionDetails(nearbyNoDupes[offset + i].wikidata, nearbyNoDupes[offset + i].name));
+            }
+        }
+        await (setDisplayedNearby(displayedAttractions));
+    }
+
+    const getNearbyPage = async (offset) => {
+        for (let i = 0; i < 5; i++) {
+            if (nearby[offset + i]) {
+                await (getAttractionDetails(nearby[offset + i].wikidata, nearby[offset + i].name));
+            }
+        }
+        await (setDisplayedNearby(displayedAttractions));
     }
 
     const handleClickNearby = async () => {
@@ -80,19 +97,12 @@ function Destination({ point, points, setPoints, destinations, setDestinations }
 
             if (response.ok) {
                 var nearbyNoDupes = removeDuplicates(nearbyAttractions);
-                console.log(nearbyNoDupes)
+                console.log(nearbyNoDupes);
+                getFirstNearbyPage(nearbyNoDupes);
                 setNearby(nearbyNoDupes);
                 setFoundNearby(true);
             }
 
-            if (nearbyNoDupes.length > 5) {
-                await (getAttractionDetails(nearbyNoDupes[0].wikidata, nearbyNoDupes[0].name));
-                await (getAttractionDetails(nearbyNoDupes[1].wikidata, nearbyNoDupes[1].name));
-                await (getAttractionDetails(nearbyNoDupes[2].wikidata, nearbyNoDupes[2].name));
-                await (getAttractionDetails(nearbyNoDupes[3].wikidata, nearbyNoDupes[3].name));
-                await (getAttractionDetails(nearbyNoDupes[4].wikidata, nearbyNoDupes[4].name));
-                await (setDisplayedNearby(displayedAttractions));
-            }
         }
 
         console.log(nearby);
@@ -104,8 +114,34 @@ function Destination({ point, points, setPoints, destinations, setDestinations }
         console.log('sending api request');
         const response = await fetch(`http://localhost:5000/api/details/${wikidata}`);
         let json = await response.json();
-        json = {...json, name: name};
+        json = { ...json, name: name };
         displayedAttractions.push(json);
+    }
+
+    const addToDestination = (attraction) => {
+        var seen = false;
+        for(let i = 0; i < nearbyAdded.length; i++){
+            if(nearbyAdded[i].name == attraction.name){
+                seen = true;
+            }
+        }
+        if(!seen){
+            setNearbyAdded([...nearbyAdded, attraction]);
+        }
+    }
+
+    const handleClickNext = () => {
+        setDisplayedNearby([]);
+        getNearbyPage(offset + 5);
+        setOffset(offset + 5);
+    }
+
+    const handleClickPrev = () => {
+        if (offset > 0) {
+            setDisplayedNearby([]);
+            getNearbyPage(offset - 5);
+            setOffset(offset - 5);
+        }
     }
 
     const handleClick = (event) => {
@@ -129,7 +165,7 @@ function Destination({ point, points, setPoints, destinations, setDestinations }
                 <ClickAwayListener onClickAway={handleClickAway}>
                     <Box sx={{ border: 1, p: 1, bgcolor: 'background.paper' }} className="box">
                         add stuff to your {point.lat + ", " + point.lng} here <br /><br />
-                        <Details notes={notes} setNotes={setNotes} point={point} handleClickNearby={handleClickNearby} nearby={displayedNearby} />
+                        <Details notes={notes} setNotes={setNotes} point={point} handleClickNearby={handleClickNearby} handleClickNext={handleClickNext} handleClickPrev={handleClickPrev} nearby={displayedNearby} nearbyAdded={nearbyAdded} addToDestination={addToDestination} />
                     </Box>
                 </ClickAwayListener>
             </Popper>

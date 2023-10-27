@@ -101,7 +101,7 @@ const getAttractionDetails = async (req, res) => {
     if (imageJson.claims && imageJson.claims.P18) {
         const imageNameNoSpace = (imageJson.claims.P18[0].mainsnak.datavalue.value).replace(/ /g, "_");
         const hashedImage = md5(imageNameNoSpace);
-        imageURL = `https://upload.wikimedia.org/wikipedia/commons/${hashedImage[0]}/${hashedImage.substring(0, 2)}/${imageNameNoSpace}`;
+        imageURL = `https://upload.wikimedia.org/wikipedia/commons/thumb/${hashedImage[0]}/${hashedImage.substring(0, 2)}/${imageNameNoSpace}/400px-${imageNameNoSpace}`;
     } else {
         imageURL = `no image available`;
     }
@@ -114,7 +114,13 @@ const getAttractionDetails = async (req, res) => {
         const descriptionResponse = await fetch(`https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro&explaintext&redirects=1&titles=${titleResponseNoSpace}`);
         const descriptionJson = await descriptionResponse.json();
         const pageid = Object.keys(descriptionJson.query.pages)[0];
-        description = descriptionJson.query.pages[pageid].extract;
+        description = descriptionJson.query.pages[pageid].extract.substring(0, 500);
+        for (let i = description.length - 1; i > 0; i--) {
+            if(description[i] == '.'){
+                description = description.substring(0, i+1);
+                break;
+            }
+        }
     } else {
         description = "no description available";
     }
