@@ -6,7 +6,9 @@ function Destinations({ points, setPoints }) {
 
     const [destinations, setDestinations] = useState([]);
 
-    console.log(destinations)
+    //convert latlng to name here?
+
+    console.log(destinations);
 
     return (
         <div className='col-sm-3 destinations overflow-auto'>

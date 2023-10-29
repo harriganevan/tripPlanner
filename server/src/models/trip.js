@@ -6,13 +6,15 @@ const TripSchema = new Schema({
     name: String,
     destinations: [
         {
+            name: String,
             latlng: [Number],
             days: Number,
             notes: String,
             places: [
                 {
                     img: String,
-                    text: String
+                    text: String,
+                    name: String
                 }
             ]
         }

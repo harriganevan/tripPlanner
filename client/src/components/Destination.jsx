@@ -6,13 +6,11 @@ function Destination({ point, points, setPoints, destinations, setDestinations }
 
     const placement = (window.innerWidth < 769 ? 'right' : 'left'); //make popper appear on right for mobile
 
-    //states for finding and adding nearby attractions
     const [nearby, setNearby] = useState([]); //all nearby attractions for destination
     const [displayedNearby, setDisplayedNearby] = useState([]); //tracks attractions to display
     const [foundNearby, setFoundNearby] = useState(false); //tracks if api call has already been made for this destination
     const [offset, setOffset] = useState(0)
 
-    //states for Destination
     const [notes, setNotes] = useState(''); //custom notes in textbox
     const [days, setDays] = useState(1); //how many days at destination
     const [nearbyAdded, setNearbyAdded] = useState([]); //attractions added to destination
@@ -20,8 +18,6 @@ function Destination({ point, points, setPoints, destinations, setDestinations }
     const [anchorEl, setAnchorEl] = useState(null); //anchor for poppers
 
     var displayedAttractions = [];
-
-    console.log(displayedNearby)
 
     useEffect(() => {
 

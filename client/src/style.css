@@ -18,8 +18,17 @@ html, body {height: 100%; overflow: hidden}
     height: 94vh;
 }
 
+.textfield {
+    width: 100%;
+}
+
 .attractions {
     height: 92vh;
+}
+
+.attractions-added {
+    height: 70vh;
+    bottom: 0;
 }
 
 .popper{

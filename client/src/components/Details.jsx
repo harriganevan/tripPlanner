@@ -1,5 +1,5 @@
 import { TextField, Button, Popper, Box, ClickAwayListener } from '@mui/material';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Attraction from './Attraction';
 
 function Details({ notes, setNotes, handleClickNearby, nearby, nearbyAdded, handleClickNext, handleClickPrev, addToDestination }) {
@@ -24,15 +24,17 @@ function Details({ notes, setNotes, handleClickNearby, nearby, nearbyAdded, hand
     return (
         <>
             <TextField
+                className='textfield'
                 id="outlined-textarea"
                 label="Add details"
                 onChange={(e) => setNotes(e.target.value)}
                 defaultValue={notes}
-                multiline
+                multiline={true}
+                rows={6}
             />
             <br />
             <Button aria-describedby={id} type="button" onClick={handleClick}>find nearby attractions</Button>
-            <div className='col-sm-3 attractions overflow-auto' style={{ width: '100%' }}>
+            <div className='col-sm-3 attractions-added overflow-auto' style={{ width: '100%' }}>
                 <ul className='list-group list-group-numbered'>
                     {nearbyAdded.map((attraction, index) =>
                         <Attraction key={attraction.img + index} attraction={attraction} addToDestination={addToDestination} added={true} />
