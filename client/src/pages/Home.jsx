@@ -5,9 +5,6 @@ import Destinations from '../components/Destinations.jsx';
 function Home() {
 
     const [points, setPoints] = useState([]);
-    console.log(points)
-
-    //convert latlng to place here? - maybe do it in places where setpoints is called
 
     return (
         <div className='row'>

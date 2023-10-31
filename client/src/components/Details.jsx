@@ -2,7 +2,7 @@ import { TextField, Button, Popper, Box, ClickAwayListener } from '@mui/material
 import { useState, useEffect, useRef } from 'react';
 import Attraction from './Attraction';
 
-function Details({ notes, setNotes, handleClickNearby, nearby, nearbyAdded, handleClickNext, handleClickPrev, addToDestination }) {
+function Details({ notes, setNotes, handleClickNearby, nearby, nearbyAdded, handleClickNext, handleClickPrev, addToDestination, removeFromDestination }) {
 
     const placement = (window.innerWidth < 769 ? 'right' : 'left'); //make popper appear on right for mobile
 
@@ -37,7 +37,7 @@ function Details({ notes, setNotes, handleClickNearby, nearby, nearbyAdded, hand
             <div className='col-sm-3 attractions-added overflow-auto' style={{ width: '100%' }}>
                 <ul className='list-group list-group-numbered'>
                     {nearbyAdded.map((attraction, index) =>
-                        <Attraction key={attraction.img + index} attraction={attraction} addToDestination={addToDestination} added={true} />
+                        <Attraction key={attraction.img + index} attraction={attraction} addToDestination={addToDestination} removeFromDestination={removeFromDestination} added={true} />
                     )}
                 </ul>
             </div>
@@ -52,7 +52,7 @@ function Details({ notes, setNotes, handleClickNearby, nearby, nearbyAdded, hand
                             {(nearby.length === 0 ? 'loading...' : null)}
                             <ul className='list-group list-group-numbered'>
                                 {nearby.map((attraction, index) =>
-                                    <Attraction key={attraction.img + index} attraction={attraction} addToDestination={addToDestination} added={false} />
+                                    <Attraction key={attraction.img + index} attraction={attraction} addToDestination={addToDestination} removeFromDestination={removeFromDestination} added={false} />
                                 )}
                             </ul>
                         </div>

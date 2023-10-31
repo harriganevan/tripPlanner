@@ -1,6 +1,6 @@
 import express from 'express';
 import User from './models/user.js';
-import { getMain, createTrip, getTrips, getTrip, deleteTrip, updateTrip, getOTMResult, getAttractionDetails } from './controllers/tripController.js'
+import { getMain, createTrip, getTrips, getTrip, deleteTrip, updateTrip, getOTMResult, getAttractionDetails, getCityName } from './controllers/tripController.js'
 
 const router = express.Router();
 
@@ -27,6 +27,8 @@ router.get('/api/otmAPI/:method/:query', getOTMResult)
 
 //retrieve img url and description with wikidata
 router.get('/api/details/:wikidata', getAttractionDetails);
+
+router.get('/api/getCityName/:lat/:lng', getCityName);
 
 //user crap 
 

@@ -2,7 +2,9 @@ import Trip from '../models/trip.js';
 import mongoose from 'mongoose';
 import apiGet from '../otmAPI.js';
 import md5 from 'blueimp-md5';
-
+import dotenv from "dotenv";
+dotenv.config();
+const username = process.env.GEONAMES_USERNAME
 //get main page
 const getMain = async (req, res) => {
     res.json({ msg: 'get homepage' });
@@ -116,8 +118,8 @@ const getAttractionDetails = async (req, res) => {
         const pageid = Object.keys(descriptionJson.query.pages)[0];
         description = descriptionJson.query.pages[pageid].extract.substring(0, 500);
         for (let i = description.length - 1; i > 0; i--) {
-            if(description[i] == '.'){
-                description = description.substring(0, i+1);
+            if (description[i] == '.') {
+                description = description.substring(0, i + 1);
                 break;
             }
         }
@@ -130,4 +132,17 @@ const getAttractionDetails = async (req, res) => {
     res.json(value);
 }
 
-export { getMain, createTrip, getTrips, getTrip, deleteTrip, updateTrip, getOTMResult, getAttractionDetails }
+const getCityName = async (req, res) => {
+    const { lat, lng } = req.params;
+    const nameResponse = await fetch(`http://api.geonames.org/findNearbyPlaceNameJSON?lat=${lat}&lng=${lng}&cities=cities15000&username=${username}`);
+    const nameJson = await nameResponse.json();
+    var name = '';
+    if(nameJson.geonames[0]) {
+        name = nameJson.geonames[0].name;
+    } else {
+        name = 'no nearby city';
+    }
+    res.json(name);
+}
+
+export { getMain, createTrip, getTrips, getTrip, deleteTrip, updateTrip, getOTMResult, getAttractionDetails, getCityName }

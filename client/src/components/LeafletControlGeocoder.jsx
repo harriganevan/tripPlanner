@@ -7,8 +7,7 @@ import L from "leaflet";
 function LeafletControlGeocoder({ points, setPoints }) {
 
     function containsObject(obj, list) {
-        var i;
-        for (i = 0; i < list.length; i++) {
+        for (let i = 0; i < list.length; i++) {
             if (list[i].lat == obj.lat && list[i].lng == obj.lng) {
                 return true;
             }
@@ -25,10 +24,12 @@ function LeafletControlGeocoder({ points, setPoints }) {
 
     const map = useMap();
 
-    const handleUpdate = (latlng) => {
+    const handleUpdate = async (latlng) => {
         if (!containsObject(latlng, points)) {
+            const response = await fetch(`http://localhost:5000/api/getCityName/${latlng.lat}/${latlng.lng}`);
+            const name = await response.json();
+            latlng.name = name;
             setPoints([...points, latlng]);
-            //setNames?
         }
     }
 

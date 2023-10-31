@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Popper, Box, Button, ClickAwayListener } from '@mui/material';
+import { Popper, Box, Button, ClickAwayListener, Input } from '@mui/material';
 import Details from './Details';
 
 function Destination({ point, points, setPoints, destinations, setDestinations }) {
@@ -12,7 +12,7 @@ function Destination({ point, points, setPoints, destinations, setDestinations }
     const [offset, setOffset] = useState(0)
 
     const [notes, setNotes] = useState(''); //custom notes in textbox
-    const [days, setDays] = useState(1); //how many days at destination
+    const [days, setDays] = useState('0'); //how many days at destination
     const [nearbyAdded, setNearbyAdded] = useState([]); //attractions added to destination
 
     const [anchorEl, setAnchorEl] = useState(null); //anchor for poppers
@@ -27,6 +27,7 @@ function Destination({ point, points, setPoints, destinations, setDestinations }
             if (destination.latlng[0] === point.lat && destination.latlng[1] === point.lng) {
                 seen = true;
                 return {
+                    name: point.name,
                     latlng: [point.lat, point.lng],
                     days: days,
                     notes: notes,
@@ -42,6 +43,7 @@ function Destination({ point, points, setPoints, destinations, setDestinations }
             setDestinations(newDestinations);
         } else { //new point
             setDestinations([...destinations, {
+                name: point.name,
                 latlng: [point.lat, point.lng],
                 days: days,
                 notes: notes,
@@ -116,14 +118,23 @@ function Destination({ point, points, setPoints, destinations, setDestinations }
 
     const addToDestination = (attraction) => {
         var seen = false;
-        for(let i = 0; i < nearbyAdded.length; i++){
-            if(nearbyAdded[i].name == attraction.name){
+        for (let i = 0; i < nearbyAdded.length; i++) {
+            if (nearbyAdded[i].name == attraction.name) {
                 seen = true;
             }
         }
-        if(!seen){
+        if (!seen) {
             setNearbyAdded([...nearbyAdded, attraction]);
         }
+        console.log(nearbyAdded)
+    }
+
+    const removeFromDestination = (attraction) => {
+        setNearbyAdded(
+            nearbyAdded.filter((nearby) =>
+                !(nearby.name == attraction.name)
+            )
+        );
     }
 
     const handleClickNext = () => {
@@ -153,15 +164,22 @@ function Destination({ point, points, setPoints, destinations, setDestinations }
 
     return (
         <li className='list-group-item'>
-            {point.lat + ", " + point.lng}<br />
+            {point.name}<br />
             <Button aria-describedby={id} type="button" onClick={handleClick}>
                 Edit Destination
             </Button>
             <Popper id={id} open={open} anchorEl={anchorEl} placement={placement} className='popper'>
                 <ClickAwayListener onClickAway={handleClickAway}>
                     <Box sx={{ border: 1, p: 1, bgcolor: 'background.paper' }} className="box">
-                        add stuff to your {point.lat + ", " + point.lng} here <br /><br />
-                        <Details notes={notes} setNotes={setNotes} point={point} handleClickNearby={handleClickNearby} handleClickNext={handleClickNext} handleClickPrev={handleClickPrev} nearby={displayedNearby} nearbyAdded={nearbyAdded} addToDestination={addToDestination} />
+                        add stuff to your {point.name} destination here <br /><br />
+                        <div className='d-flex justify-conntent-start'>
+                            <Input type='number'
+                                defaultValue={days}
+                                onChange={(e) => Number(e.target.value) > 0 ? setDays(e.target.value) : setDays('0')} />
+                            <p>Days</p>
+                        </div>
+                        <br />
+                        <Details notes={notes} setNotes={setNotes} point={point} handleClickNearby={handleClickNearby} handleClickNext={handleClickNext} handleClickPrev={handleClickPrev} nearby={displayedNearby} nearbyAdded={nearbyAdded} addToDestination={addToDestination} removeFromDestination={removeFromDestination} />
                     </Box>
                 </ClickAwayListener>
             </Popper>

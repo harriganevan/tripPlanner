@@ -1,10 +1,6 @@
 import { Button } from '@mui/material';
 
-function Attraction({ attraction, addToDestination, added }) {
-
-    const handleClick = () => {
-        addToDestination(attraction);
-    }
+function Attraction({ attraction, addToDestination, removeFromDestination, added }) {
 
     return (
         <div className="card" style={{ width: '100%' }}>
@@ -12,7 +8,7 @@ function Attraction({ attraction, addToDestination, added }) {
             <div className="card-body">
                 <h5 className="card-title">{attraction.name}</h5>
                 <p className="card-text">{attraction.description}</p>
-                {(!added ? <Button type="button" onClick={handleClick}>Add to this destination</Button> : <Button type="button">remove</Button>)}
+                {(!added ? <Button type="button" onClick={() => addToDestination(attraction)}>Add to this destination</Button> : <Button type="button" onClick={() => removeFromDestination(attraction)}>remove</Button>)}
             </div>
         </div>
     )

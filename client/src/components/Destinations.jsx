@@ -6,8 +6,6 @@ function Destinations({ points, setPoints }) {
 
     const [destinations, setDestinations] = useState([]);
 
-    //convert latlng to name here?
-
     console.log(destinations);
 
     return (
