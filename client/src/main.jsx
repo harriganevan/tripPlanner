@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './components/App.jsx';
+import { AuthContextProvider } from './context/AuthContext.jsx';
 import "./style.css";
 import "leaflet/dist/leaflet.css";
 import '@fontsource/roboto/300.css';
@@ -11,6 +12,8 @@ import '@fontsource/roboto/700.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <App />
+    <AuthContextProvider>
+      <App />
+    </AuthContextProvider>
   </React.StrictMode>,
 )

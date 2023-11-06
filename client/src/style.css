@@ -48,6 +48,14 @@ html, body {height: 100%; overflow: hidden}
     margin-right: .5rem;
 }
 
+.login-signup {
+    margin-top: 25px;
+}
+
+.error {
+    margin-top: 15px;
+}
+
 @media screen and (max-width: 768px) {
     .leaflet-container {
         height: 50vh;

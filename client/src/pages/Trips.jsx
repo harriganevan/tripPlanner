@@ -4,7 +4,7 @@ import TripDetails from '../components/TripDetails';
 function Trips() {
 
     const [trips, setTrips] = useState(null);
-
+    
     useEffect(() => {
         const fetchTrips = async () => {
             const response = await fetch('http://localhost:5000/api/trips');
@@ -18,7 +18,7 @@ function Trips() {
 
         fetchTrips();
 
-    }, []);
+    }, [trips]);
 
     return (
         <>

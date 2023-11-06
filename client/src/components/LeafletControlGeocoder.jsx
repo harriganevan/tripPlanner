@@ -26,6 +26,7 @@ function LeafletControlGeocoder({ points, setPoints }) {
 
     const handleUpdate = async (latlng) => {
         if (!containsObject(latlng, points)) {
+            // L.marker(latlng, { icon }).addTo(map)
             const response = await fetch(`http://localhost:5000/api/getCityName/${latlng.lat}/${latlng.lng}`);
             const name = await response.json();
             latlng.name = name;

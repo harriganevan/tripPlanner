@@ -4,11 +4,8 @@ import apiGet from '../otmAPI.js';
 import md5 from 'blueimp-md5';
 import dotenv from "dotenv";
 dotenv.config();
+
 const username = process.env.GEONAMES_USERNAME
-//get main page
-const getMain = async (req, res) => {
-    res.json({ msg: 'get homepage' });
-}
 
 //get all trips
 const getTrips = async (req, res) => {
@@ -36,7 +33,7 @@ const getTrip = async (req, res) => {
 //create new trip
 const createTrip = async (req, res) => {
     const newTrip = new Trip({
-        name: req.body.name,
+        name: req.body.tripName,
         destinations: req.body.destinations
     });
 
@@ -134,10 +131,10 @@ const getAttractionDetails = async (req, res) => {
 
 const getCityName = async (req, res) => {
     const { lat, lng } = req.params;
-    const nameResponse = await fetch(`http://api.geonames.org/findNearbyPlaceNameJSON?lat=${lat}&lng=${lng}&cities=cities15000&username=${username}`);
+    const nameResponse = await fetch(`https://secure.geonames.org/findNearbyPlaceNameJSON?lat=${lat}&lng=${lng}&cities=cities15000&username=${username}`);
     const nameJson = await nameResponse.json();
     var name = '';
-    if(nameJson.geonames[0]) {
+    if(nameJson.geonames && nameJson.geonames[0]) {
         name = nameJson.geonames[0].name;
     } else {
         name = 'no nearby city';
@@ -145,4 +142,4 @@ const getCityName = async (req, res) => {
     res.json(name);
 }
 
-export { getMain, createTrip, getTrips, getTrip, deleteTrip, updateTrip, getOTMResult, getAttractionDetails, getCityName }
+export { createTrip, getTrips, getTrip, deleteTrip, updateTrip, getOTMResult, getAttractionDetails, getCityName }

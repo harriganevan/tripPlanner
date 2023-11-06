@@ -22,7 +22,7 @@ function Destination({ point, points, setPoints, destinations, setDestinations }
     useEffect(() => {
 
         var seen = false;
-
+        
         const newDestinations = destinations.map((destination) => {
             if (destination.latlng[0] === point.lat && destination.latlng[1] === point.lng) {
                 seen = true;

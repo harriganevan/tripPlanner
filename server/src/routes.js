@@ -1,14 +1,11 @@
 import express from 'express';
-import User from './models/user.js';
-import { getMain, createTrip, getTrips, getTrip, deleteTrip, updateTrip, getOTMResult, getAttractionDetails, getCityName } from './controllers/tripController.js'
+import { createTrip, getTrips, getTrip, deleteTrip, updateTrip, getOTMResult, getAttractionDetails, getCityName } from './controllers/tripController.js'
+import { loginUser, signupUser } from './controllers/userController.js';
 
 const router = express.Router();
 
-//get homepage - no login needed - main page with map
-router.get('/', getMain);
-
 //add new trip
-router.post("/", createTrip);
+router.post("/api/trips", createTrip);
 
 //get all trips
 router.get('/api/trips', getTrips);
@@ -30,28 +27,10 @@ router.get('/api/details/:wikidata', getAttractionDetails);
 
 router.get('/api/getCityName/:lat/:lng', getCityName);
 
-//user crap 
+//user crap <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
-router.get("/signup", async (req, res) => {
-    //get signup page
-});
+router.post("/api/signup", signupUser);
 
-router.post("/signup", async (req, res) => {
-    //receive signup data
-    const newUser = new User({
-        username: req.body.username,
-        password: req.body.password
-    });
-    const createdUser = await newUser.save();
-    res.json(createdUser);
-});
-
-router.get("/login", async (req, res) => {
-    //get login page
-});
-
-router.post("/login", async (req, res) => {
-    //receive login data
-});
+router.post("/api/login", loginUser);
 
 export default router;
