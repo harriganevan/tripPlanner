@@ -1,11 +1,12 @@
 import express from 'express';
 import { createTrip, getTrips, getTrip, deleteTrip, updateTrip, getOTMResult, getAttractionDetails, getCityName } from './controllers/tripController.js'
 import { loginUser, signupUser } from './controllers/userController.js';
+import requireAuth from './middleware/requireauth.js';
 
 const router = express.Router();
 
 //add new trip
-router.post("/api/trips", createTrip);
+router.post("/api/trips", requireAuth, createTrip);
 
 //get all trips
 router.get('/api/trips', getTrips);
@@ -14,10 +15,10 @@ router.get('/api/trips', getTrips);
 router.get('/api/:id', getTrip);
 
 //delete specific trip
-router.delete('/api/:id', deleteTrip);
+router.delete('/api/:id', requireAuth, deleteTrip);
 
 //update specific trip
-router.patch('/api/:id', updateTrip);
+router.patch('/api/:id', requireAuth, updateTrip);
 
 //otmapi
 router.get('/api/otmAPI/:method/:query', getOTMResult)
@@ -25,6 +26,7 @@ router.get('/api/otmAPI/:method/:query', getOTMResult)
 //retrieve img url and description with wikidata
 router.get('/api/details/:wikidata', getAttractionDetails);
 
+//get nearest city name with pop > 15000
 router.get('/api/getCityName/:lat/:lng', getCityName);
 
 //user crap <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>

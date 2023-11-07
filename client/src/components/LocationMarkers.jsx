@@ -18,8 +18,6 @@ function LocationMarkers({ points, setPoints }) {
   useMapEvent({
     async click(e) {
       if (!containsObject(e.latlng, points)) {
-        //store an array of these markers? as a state variable in parent?
-        // L.marker(e.latlng).addTo(map)
         const response = await fetch(`http://localhost:5000/api/getCityName/${e.latlng.lat}/${e.latlng.lng}`);
         const name = await response.json();
         e.latlng.name = name;

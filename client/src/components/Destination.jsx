@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Popper, Box, Button, ClickAwayListener, Input } from '@mui/material';
 import Details from './Details';
 
-function Destination({ point, points, setPoints, destinations, setDestinations }) {
+function Destination({ point, points, setPoints, destinations, setDestinations, defaultNotes, defaultDays, defaultPlaces }) {
 
     const placement = (window.innerWidth < 769 ? 'right' : 'left'); //make popper appear on right for mobile
 
@@ -11,18 +11,22 @@ function Destination({ point, points, setPoints, destinations, setDestinations }
     const [foundNearby, setFoundNearby] = useState(false); //tracks if api call has already been made for this destination
     const [offset, setOffset] = useState(0)
 
-    const [notes, setNotes] = useState(''); //custom notes in textbox
-    const [days, setDays] = useState('0'); //how many days at destination
-    const [nearbyAdded, setNearbyAdded] = useState([]); //attractions added to destination
+    const [notes, setNotes] = useState(defaultNotes); //custom notes in textbox
+    const [days, setDays] = useState(defaultDays); //how many days at destination
+    const [nearbyAdded, setNearbyAdded] = useState(defaultPlaces); //attractions added to destination
 
     const [anchorEl, setAnchorEl] = useState(null); //anchor for poppers
 
     var displayedAttractions = [];
 
+    localStorage.setItem('destinations', JSON.stringify(destinations));
+
+    console.log(JSON.parse(localStorage.getItem('destinations')));
+
     useEffect(() => {
 
         var seen = false;
-        
+
         const newDestinations = destinations.map((destination) => {
             if (destination.latlng[0] === point.lat && destination.latlng[1] === point.lng) {
                 seen = true;

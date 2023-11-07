@@ -5,8 +5,6 @@ import Destinations from '../components/Destinations.jsx';
 function Home() {
 
     const [points, setPoints] = useState([]);
-    //maybe add destinations here and allow props from App.jsx for when loading a trip from database
-    //trip id state?
 
     return (
         <div className='row'>
