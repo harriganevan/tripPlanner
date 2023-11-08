@@ -1,13 +1,27 @@
 import { useEffect, useState } from 'react';
 import TripDetails from '../components/TripDetails';
+import useAuthContext from '../hooks/useAuthContext';
 
 function Trips() {
 
     const [trips, setTrips] = useState(null);
-    
+    const [trigger, setTrigger] = useState(false); //fix this
+    const { user } = useAuthContext();
+
+
     useEffect(() => {
+
+        if (!user) {
+            console.log('weird')
+            return
+        }
+        console.log('what')
         const fetchTrips = async () => {
-            const response = await fetch('http://localhost:5000/api/trips');
+            const response = await fetch('http://localhost:5000/api/trips', {
+                headers: {
+                    'Authorization': `Bearer ${user.token}`
+                }
+            });
             const json = await response.json();
 
             if (response.ok) {
@@ -18,7 +32,7 @@ function Trips() {
 
         fetchTrips();
 
-    }, [trips]);
+    }, [user, trigger]);
 
     return (
         <>
@@ -26,7 +40,7 @@ function Trips() {
             <ul className='list-group'>
                 {trips && trips.map((trip) => (
                     <li className='list-group-item' key={trip._id}>
-                        <TripDetails trip={trip} />
+                        <TripDetails trip={trip} setTrigger={setTrigger} trigger={trigger} />
                     </li>
                 ))}
             </ul>

@@ -19,7 +19,7 @@ function Destination({ point, points, setPoints, destinations, setDestinations, 
 
     var displayedAttractions = [];
 
-    localStorage.setItem('destinations', JSON.stringify(destinations));
+    // localStorage.setItem('destinations', JSON.stringify(destinations));
 
     console.log(JSON.parse(localStorage.getItem('destinations')));
 

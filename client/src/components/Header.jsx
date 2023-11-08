@@ -23,9 +23,11 @@ function Header() {
                 <div className="collapse navbar-collapse" id="navbarNav">
                     <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                         <li className="nav-item">
-                            <Link to="/trips" style={{ textDecoration: "none" }}>
-                                <span className='navbar-text nav-link active'>Your Trips</span>
-                            </Link>
+                            {user &&
+                                <Link to="/trips" style={{ textDecoration: "none" }}>
+                                    <button className='btn navbar-text nav-link active'>Your Trips</button>
+                                </Link>
+                            }
                         </li>
                     </ul>
                     <span>

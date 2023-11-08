@@ -6,6 +6,9 @@ import { LatLng } from 'leaflet';
 
 function Destinations({ points, setPoints }) {
 
+    //if loaded from trips menu - add id to local storage
+    //then if local storage has id - setID(localStorage'id')
+
     const { user } = useAuthContext();
 
     const [open, setOpen] = useState(false);
@@ -13,10 +16,15 @@ function Destinations({ points, setPoints }) {
     const [tripName, setTripName] = useState();
     const [saved, setSaved] = useState(false);
     const [id, setID] = useState(null);
+    const[loading, setLoading] = useState(true); //waits for useEffect to finish
 
     console.log(destinations);
     console.log(points)
 
+    if(!loading){
+        localStorage.setItem('destinations', JSON.stringify(destinations));
+    }
+    
     useEffect(() => {
         // localStorage.removeItem('destinations')
         const destinations = JSON.parse(localStorage.getItem('destinations'));
@@ -33,14 +41,22 @@ function Destinations({ points, setPoints }) {
             setPoints(newPoints);
         }
 
+        setLoading(false);
+
     }, []);
 
     const saveNewTrip = async () => {
+
+        if(!user){
+            return
+        }
+
         const response = await fetch(`http://localhost:5000/api/trips/`, {
             method: 'POST',
             body: JSON.stringify({ tripName, destinations }),
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${user.token}`
             }
         })
         const json = await response.json();
@@ -55,11 +71,17 @@ function Destinations({ points, setPoints }) {
     }
 
     const updateTrip = async () => {
+
+        if(!user){
+            return
+        }
+
         const response = await fetch(`http://localhost:5000/api/${id}`, {
             method: 'PATCH',
             body: JSON.stringify({ tripName, destinations }),
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${user.token}`
             }
         })
         const json = await response.json();
@@ -79,9 +101,6 @@ function Destinations({ points, setPoints }) {
         setOpen(false);
         if (user) {
             saveNewTrip();
-        }
-        if (!user) {
-            //popup saying you need to login
         }
     }
 
