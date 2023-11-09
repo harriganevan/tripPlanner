@@ -9,10 +9,10 @@ const router = express.Router();
 router.post("/api/trips", requireAuth, createTrip);
 
 //get all trips
-router.get('/api/trips', getTrips);
+router.get('/api/trips', requireAuth, getTrips);
 
-//main page with trip loaded
-router.get('/api/:id', getTrip);
+//get trip
+router.get('/api/:id', requireAuth, getTrip);
 
 //delete specific trip
 router.delete('/api/:id', requireAuth, deleteTrip);

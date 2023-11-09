@@ -9,7 +9,8 @@ const username = process.env.GEONAMES_USERNAME
 
 //get all trips
 const getTrips = async (req, res) => {
-    const trips = await Trip.find({});
+    const user_id = req.user._id;
+    const trips = await Trip.find({ user_id });
     res.json(trips);
 }
 
@@ -34,14 +35,15 @@ const getTrip = async (req, res) => {
 const createTrip = async (req, res) => {
     const newTrip = new Trip({
         name: req.body.tripName,
-        destinations: req.body.destinations
+        destinations: req.body.destinations,
+        user_id: req.user._id
     });
 
     try {
         const createdTrip = await newTrip.save();
-        res.json(createdTrip);
+        res.status(200).json(createdTrip);
     } catch (error) {
-        res.json({ error: error.message });
+        res.status(400).json({ error: error.message });
     }
 }
 
@@ -113,12 +115,17 @@ const getAttractionDetails = async (req, res) => {
         const descriptionResponse = await fetch(`https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro&explaintext&redirects=1&titles=${titleResponseNoSpace}`);
         const descriptionJson = await descriptionResponse.json();
         const pageid = Object.keys(descriptionJson.query.pages)[0];
-        description = descriptionJson.query.pages[pageid].extract.substring(0, 500);
-        for (let i = description.length - 1; i > 0; i--) {
-            if (description[i] == '.') {
-                description = description.substring(0, i + 1);
-                break;
+        if (descriptionJson.query.pages[pageid].extract) {
+            description = descriptionJson.query.pages[pageid].extract.substring(0, 500);
+            for (let i = description.length - 1; i > 0; i--) {
+                if (description[i] == '.') {
+                    description = description.substring(0, i + 1);
+                    break;
+                }
             }
+        }
+        else {
+            description = "no description available"
         }
     } else {
         description = "no description available";
@@ -134,7 +141,7 @@ const getCityName = async (req, res) => {
     const nameResponse = await fetch(`https://secure.geonames.org/findNearbyPlaceNameJSON?lat=${lat}&lng=${lng}&cities=cities15000&username=${username}`);
     const nameJson = await nameResponse.json();
     var name = '';
-    if(nameJson.geonames && nameJson.geonames[0]) {
+    if (nameJson.geonames && nameJson.geonames[0]) {
         name = nameJson.geonames[0].name;
     } else {
         name = 'no nearby city';

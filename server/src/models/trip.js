@@ -18,7 +18,11 @@ const TripSchema = new Schema({
                 }
             ]
         }
-    ]
+    ],
+    user_id: {
+        type: String,
+        required: true
+    }
 });
 
 const TripModel = mongoose.model("Trip", TripSchema);

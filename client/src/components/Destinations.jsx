@@ -16,17 +16,21 @@ function Destinations({ points, setPoints }) {
     const [tripName, setTripName] = useState();
     const [saved, setSaved] = useState(false);
     const [id, setID] = useState(null);
-    const[loading, setLoading] = useState(true); //waits for useEffect to finish
+    const [loading, setLoading] = useState(true); //waits for useEffect to finish
 
     console.log(destinations);
     console.log(points)
 
-    if(!loading){
+    if (!loading) {
         localStorage.setItem('destinations', JSON.stringify(destinations));
     }
-    
+
     useEffect(() => {
-        // localStorage.removeItem('destinations')
+        if (localStorage.getItem('id')) {
+            setID(localStorage.getItem('id'));
+            setSaved(true);
+            localStorage.removeItem('id');
+        }
         const destinations = JSON.parse(localStorage.getItem('destinations'));
         console.log(JSON.parse(localStorage.getItem('destinations')));
         if (destinations) {
@@ -47,7 +51,7 @@ function Destinations({ points, setPoints }) {
 
     const saveNewTrip = async () => {
 
-        if(!user){
+        if (!user) {
             return
         }
 
@@ -72,7 +76,7 @@ function Destinations({ points, setPoints }) {
 
     const updateTrip = async () => {
 
-        if(!user){
+        if (!user) {
             return
         }
 

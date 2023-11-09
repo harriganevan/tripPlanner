@@ -1,13 +1,16 @@
 import { Button } from '@mui/material';
 import useAuthContext from '../hooks/useAuthContext';
+import { useNavigate } from 'react-router-dom';
 
 function TripDetails({ trip, setTrigger, trigger }) {
 
     const { user } = useAuthContext();
 
-    const handleClick = async () => {
+    const navigate = useNavigate();
 
-        if(!user){
+    const handleClickDelete = async () => {
+
+        if (!user) {
             return
         }
 
@@ -28,10 +31,34 @@ function TripDetails({ trip, setTrigger, trigger }) {
 
     }
 
+    const handleClickOpen = async () => {
+
+        if (!user) {
+            return
+        }
+
+        const response = await fetch(`http://localhost:5000/api/${trip._id}`, {
+            headers: {
+                'Authorization': `Bearer ${user.token}`
+            }
+        })
+        const json = await response.json();
+        console.log(json);
+        if (response.ok) {
+            console.log('trip loaded');
+            localStorage.setItem('id', json._id);
+            localStorage.setItem('destinations', JSON.stringify(json.destinations));
+            navigate('/');
+        } else {
+            console.log('uhoh');
+        }
+    }
+
     return (
         <>
             <p>{trip.name}</p>
-            <Button onClick={handleClick}>Delete</Button>
+            <Button onClick={handleClickDelete}>Delete</Button>
+            <Button onClick={handleClickOpen}>Open</Button>
         </>
     );
 }

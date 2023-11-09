@@ -8,7 +8,6 @@ function Trips() {
     const [trigger, setTrigger] = useState(false); //fix this
     const { user } = useAuthContext();
 
-
     useEffect(() => {
 
         if (!user) {
