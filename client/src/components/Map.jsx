@@ -6,7 +6,7 @@ function Map({ points, setPoints }) {
 
   return (
     <>
-      <MapContainer className='col-sm-9' center={[38, -96]} zoom={5} scrollWheelZoom={true} worldCopyJump={true}>
+      <MapContainer className='map-container col-sm-9' center={[38, -96]} zoom={5} scrollWheelZoom={true} worldCopyJump={true}>
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

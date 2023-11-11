@@ -18,9 +18,6 @@ function Destinations({ points, setPoints }) {
     const [id, setID] = useState(null);
     const [loading, setLoading] = useState(true); //waits for useEffect to finish
 
-    console.log(destinations);
-    console.log(points)
-
     if (!loading) {
         localStorage.setItem('destinations', JSON.stringify(destinations));
     }
@@ -29,7 +26,6 @@ function Destinations({ points, setPoints }) {
         if (localStorage.getItem('id')) {
             setID(localStorage.getItem('id'));
             setSaved(true);
-            localStorage.removeItem('id');
         }
         const destinations = JSON.parse(localStorage.getItem('destinations'));
         console.log(JSON.parse(localStorage.getItem('destinations')));
@@ -151,28 +147,33 @@ function Destinations({ points, setPoints }) {
                     </DialogContent>
                 </Dialog>
             )}
-            <div className='col-sm-3 destinations overflow-auto'>
-                <div className='d-flex justify-content-between'>
-                    <h1 className='destinations-header'>Destinations</h1>
+            <div className='col-sm-3 destinations '>
+                <div className='d-flex justify-content-between destinations-header'>
+                    <h1>Destinations</h1>
                     <Button variant='contained' size='medium' sx={{ width: 100 }} onClick={handleClick}>save</Button>
                 </div>
-                <ul className='list-group list-group-numbered'>
-                    {
-                        points.map(point => {
-                            //add notes, days, nearby props to be used as default for useState in destination
-                            if (point.fromLocalStorage) {
-                                //find the point in destinations
-                                for (let i = 0; i < destinations.length; i++) {
-                                    if (destinations[i].latlng[0] === point.lat && destinations[i].latlng[1] === point.lng) {
-                                        return <Destination key={point.lat + point.lng} point={point} destinations={destinations} setDestinations={setDestinations} points={points} setPoints={setPoints} defaultNotes={destinations[i].notes} defaultDays={destinations[i].days} defaultPlaces={destinations[i].places} />
+                <div className='overflow-auto destinations-numbers'>
+                    <ul className='list-group list-group-numbered'>
+                        {
+                            points.map(point => {
+                                if (point.fromLocalStorage) {
+                                    //find the point in destinations
+                                    for (let i = 0; i < destinations.length; i++) {
+                                        if (destinations[i].latlng[0] === point.lat && destinations[i].latlng[1] === point.lng) {
+                                            return <Destination key={point.lat + point.lng} point={point} destinations={destinations} setDestinations={setDestinations} points={points} setPoints={setPoints} defaultNotes={destinations[i].notes} defaultDays={destinations[i].days} defaultPlaces={destinations[i].places} />
+                                        }
                                     }
+                                } else {
+                                    //use default vaulues
+                                    return <Destination key={point.lat + point.lng} point={point} destinations={destinations} setDestinations={setDestinations} points={points} setPoints={setPoints} defaultNotes={''} defaultDays={'0'} defaultPlaces={[]} />
                                 }
-                            } else {
-                                //use default vaulues
-                                return <Destination key={point.lat + point.lng} point={point} destinations={destinations} setDestinations={setDestinations} points={points} setPoints={setPoints} defaultNotes={''} defaultDays={'0'} defaultPlaces={[]} />
-                            }
-                        })}
-                </ul>
+                            })}
+                    </ul>
+                </div>
+                <div className='footer'>
+                    <Button>Clear Destinations</Button>
+                </div>
+                {/* add footer for clear trip and new trip */}
             </div>
         </>
     );

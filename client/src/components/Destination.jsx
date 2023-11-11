@@ -19,10 +19,6 @@ function Destination({ point, points, setPoints, destinations, setDestinations, 
 
     var displayedAttractions = [];
 
-    // localStorage.setItem('destinations', JSON.stringify(destinations));
-
-    console.log(JSON.parse(localStorage.getItem('destinations')));
-
     useEffect(() => {
 
         var seen = false;
@@ -156,7 +152,7 @@ function Destination({ point, points, setPoints, destinations, setDestinations, 
     }
 
     const handleClick = (event) => {
-        setAnchorEl(anchorEl ? null : event.currentTarget);
+        setAnchorEl(document.getElementsByClassName('destinations-header')[0]);
     };
 
     const handleClickAway = () => {

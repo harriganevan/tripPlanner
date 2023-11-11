@@ -34,13 +34,6 @@ function Details({ notes, setNotes, handleClickNearby, nearby, nearbyAdded, hand
             />
             <br />
             <Button aria-describedby={id} type="button" onClick={handleClick}>find nearby attractions</Button>
-            <div className='col-sm-3 attractions-added overflow-auto' style={{ width: '100%' }}>
-                <ul className='list-group list-group-numbered'>
-                    {nearbyAdded.map((attraction, index) =>
-                        <Attraction key={attraction.img + index} attraction={attraction} addToDestination={addToDestination} removeFromDestination={removeFromDestination} added={true} />
-                    )}
-                </ul>
-            </div>
             <Popper id={id} open={open} anchorEl={anchorEl} placement={placement} className='popper'>
                 <ClickAwayListener onClickAway={handleClickAway}>
                     <Box sx={{ border: 1, p: 1, bgcolor: 'background.paper' }} className="box-attractions">
@@ -48,7 +41,7 @@ function Details({ notes, setNotes, handleClickNearby, nearby, nearbyAdded, hand
                             <Button onClick={handleClickPrev}>previous</Button>
                             <Button onClick={handleClickNext}>next</Button>
                         </div>
-                        <div className='col-sm-3 attractions overflow-auto' style={{ width: '100%' }}>
+                        <div className='overflow-auto' style={{ width: '100%' }}>
                             {(nearby.length === 0 ? 'loading...' : null)}
                             <ul className='list-group list-group-numbered'>
                                 {nearby.map((attraction, index) =>
@@ -59,6 +52,13 @@ function Details({ notes, setNotes, handleClickNearby, nearby, nearbyAdded, hand
                     </Box>
                 </ClickAwayListener>
             </Popper>
+            <div className='overflow-auto' style={{ width: '100%' }}>
+                <ul className='list-group list-group-numbered'>
+                    {nearbyAdded.map((attraction, index) =>
+                        <Attraction key={attraction.img + index} attraction={attraction} addToDestination={addToDestination} removeFromDestination={removeFromDestination} added={true} />
+                    )}
+                </ul>
+            </div>
         </>
     );
 }
