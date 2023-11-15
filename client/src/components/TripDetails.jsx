@@ -4,11 +4,15 @@ import { useNavigate } from 'react-router-dom';
 
 function TripDetails({ trip, setTrigger, trigger }) {
 
+    console.log(trip)
+
     const { user } = useAuthContext();
 
     const navigate = useNavigate();
 
     const handleClickDelete = async () => {
+
+        //add confirmation
 
         if (!user) {
             return
@@ -56,7 +60,13 @@ function TripDetails({ trip, setTrigger, trigger }) {
 
     return (
         <>
-            <p>{trip.name}</p>
+            <h5 style={{display: 'inline'}}>{trip.name}</h5> <p style={{display: 'inline'}}>: {trip.destinations.map((destination, index) => {
+                if (index != trip.destinations.length - 1) {
+                    return (destination.name + ' -> ');
+                } else {
+                    return (destination.name);
+                }
+            })}</p><br></br>
             <Button onClick={handleClickDelete}>Delete</Button>
             <Button onClick={handleClickOpen}>Open</Button>
         </>

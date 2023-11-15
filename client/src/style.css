@@ -22,10 +22,15 @@ body {
     height: 100%;
 }
 
+.leaflet-left {
+    padding-left: 12px;
+}
+
 .destinations {
     display: flex;
     flex-direction: column;
     height: 100%;
+    padding-right: 24px;
 }
 
 .destinations-header {
@@ -40,6 +45,8 @@ body {
     background-color: #212529;
     color: white;
     text-align: center;
+    margin-left: -12px;
+    margin-right: -12px;
 }
 
 .textfield {
@@ -74,6 +81,10 @@ body {
 
 .footer-button{
     padding: 20px !important;
+}
+
+.trips-container {
+    padding: 12px;
 }
 
 .login-signup {

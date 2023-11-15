@@ -1,6 +1,6 @@
 import Trip from '../models/trip.js';
 import mongoose from 'mongoose';
-import apiGet from '../otmAPI.js';
+import apiGet from './otmAPI.js';
 import md5 from 'blueimp-md5';
 import dotenv from "dotenv";
 dotenv.config();
@@ -19,16 +19,16 @@ const getTrip = async (req, res) => {
     const { id } = req.params;
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
-        return res.json({ error: "no such trip" });
+        return res.status(400).json({ error: "no such trip" });
     }
 
     const trip = await Trip.findById(id);
 
     if (!trip) {
-        return res.json({ error: "trip not found" });
+        return res.status(400).json({ error: "trip not found" });
     }
 
-    res.json(trip);
+    res.status(200).json(trip);
 }
 
 //create new trip
@@ -52,16 +52,16 @@ const deleteTrip = async (req, res) => {
     const { id } = req.params;
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
-        return res.json({ error: "no such trip" });
+        return res.status(400).json({ error: "no such trip" });
     }
 
     const trip = await Trip.findOneAndDelete({ _id: id });
 
     if (!trip) {
-        return res.json({ error: "trip not found" });
+        return res.status(400).json({ error: "trip not found" });
     }
 
-    res.json(trip);
+    res.status(200).json(trip);
 }
 
 //update a trip
@@ -69,16 +69,16 @@ const updateTrip = async (req, res) => {
     const { id } = req.params;
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
-        return res.json({ error: "no such trip" });
+        return res.status(400).json({ error: "no such trip" });
     }
 
     const trip = await Trip.findOneAndUpdate({ _id: id }, { ...req.body }, { new: true });
 
     if (!trip) {
-        return res.json({ error: "trip not found" });
+        return res.status(400).json({ error: "trip not found" });
     }
 
-    res.json(trip);
+    res.status(200).json(trip);
 
 }
 
@@ -87,8 +87,10 @@ const getOTMResult = async (req, res) => {
     const { method, query } = req.params;
 
     apiGet(method, query).then(function (data) {
-        res.json(data);
-    })
+        res.status(200).json(data);
+    }).catch((error) => {
+        res.status(400).json(error);
+    });
 
 }
 
@@ -129,7 +131,7 @@ const getAttractionDetails = async (req, res) => {
         description = "no description available";
     }
     const value = { img: imageURL, description: description };
-    res.json(value);
+    res.status(200).json(value);
 }
 
 const getCityName = async (req, res) => {
@@ -142,7 +144,7 @@ const getCityName = async (req, res) => {
     } else {
         name = 'no nearby city';
     }
-    res.json(name);
+    res.status(200).json(name);
 }
 
 export { createTrip, getTrips, getTrip, deleteTrip, updateTrip, getOTMResult, getAttractionDetails, getCityName }

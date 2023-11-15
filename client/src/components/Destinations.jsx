@@ -11,7 +11,9 @@ function Destinations({ points, setPoints }) {
 
     const { user } = useAuthContext();
 
-    const [open, setOpen] = useState(false);
+    const [saveOpen, setSaveOpen] = useState(false);
+    const [clearOpen, setClearOpen] = useState(false);
+    const [newOpen, setNewOpen] = useState(false);
     const [destinations, setDestinations] = useState([]);
     const [tripName, setTripName] = useState();
     const [saved, setSaved] = useState(false);
@@ -70,6 +72,8 @@ function Destinations({ points, setPoints }) {
         } else {
             console.log('uhoh')
         }
+
+        //add save successful banner
     }
 
     const updateTrip = async () => {
@@ -93,31 +97,78 @@ function Destinations({ points, setPoints }) {
         } else {
             console.log('uhoh')
         }
+
+        //add save successful banner
     }
 
-    const handleClose = () => {
-        setOpen(false);
+    //handle save click
+    const handleSaveClose = () => {
+        setSaveOpen(false);
     }
 
-    const handleClickSave = async () => {
-        setOpen(false);
-        if (user) {
-            saveNewTrip();
-        }
-    }
-
-    const handleClick = () => {
+    const handleSaveClick = () => {
         if (!saved) {
-            setOpen(true);
+            setSaveOpen(true);
         } else {
             updateTrip();
         }
     }
 
+    const handleSaveClickFinal = () => {
+        setSaveOpen(false);
+        if (user) {
+            saveNewTrip();
+        }
+    }
+
+    //handle clear click
+    const handleClearClose = () => {
+        setClearOpen(false);
+    }
+
+    const handleClearClick = () => {
+        setClearOpen(true);
+    }
+
+    const handleClearClickFinalYes = () => {
+        setPoints([]);
+        setDestinations([]);
+        setClearOpen(false);
+    }
+
+    const handleClearClickFinalNo = () => {
+        setClearOpen(false);
+    }
+
+    //handle new click
+    const handleNewClose = () => {
+        setNewOpen(false);
+    }
+
+    const handleNewClick = () => {
+        setNewOpen(true);
+    }
+
+    const handleNewClickFinalYes = () => {
+        setPoints([]);
+        setDestinations([]);
+        setSaved(false);
+        if (localStorage.getItem('id')) {
+            updateTrip();
+        }
+        localStorage.removeItem('destinations');
+        localStorage.removeItem('id');
+        setNewOpen(false);
+    }
+
+    const handleNewClickFinalNo = () => {
+        setNewOpen(false);
+    }
+
     return (
         <>
             {user && (
-                <Dialog open={open} onClose={handleClose}>
+                <Dialog open={saveOpen} onClose={handleSaveClose}>
                     <DialogTitle>Name</DialogTitle>
                     <DialogContent>
                         <DialogContentText>
@@ -135,12 +186,12 @@ function Destinations({ points, setPoints }) {
                         />
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={handleClickSave}>Save</Button>
+                        <Button onClick={handleSaveClickFinal}>Save</Button>
                     </DialogActions>
                 </Dialog>
             )}
             {!user && (
-                <Dialog open={open} onClose={handleClose}>
+                <Dialog open={saveOpen} onClose={handleSaveClose}>
                     <DialogTitle>Sign up or Log in to save trip</DialogTitle>
                     <DialogContent>
                         <DialogContentText>
@@ -149,10 +200,34 @@ function Destinations({ points, setPoints }) {
                     </DialogContent>
                 </Dialog>
             )}
+            <Dialog open={clearOpen} onClose={handleClearClose}>
+                <DialogTitle>Are you sure?</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        Are you sure you want to clear all destinations?
+                    </DialogContentText>
+                    <DialogActions>
+                        <Button onClick={handleClearClickFinalNo}>No</Button>
+                        <Button onClick={handleClearClickFinalYes}>Yes</Button>
+                    </DialogActions>
+                </DialogContent>
+            </Dialog>
+            <Dialog open={newOpen} onClose={handleNewClose}>
+                <DialogTitle>Are you sure?</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        Are you sure you want to start a new trip? This trip will be saved.
+                    </DialogContentText>
+                    <DialogActions>
+                        <Button onClick={handleNewClickFinalNo}>No</Button>
+                        <Button onClick={handleNewClickFinalYes}>Yes</Button>
+                    </DialogActions>
+                </DialogContent>
+            </Dialog>
             <div className='col-sm-3 destinations '>
                 <div className='d-flex justify-content-between destinations-header'>
                     <h1>Destinations</h1>
-                    <Button variant='contained' size='medium' sx={{ width: 100 }} onClick={handleClick}>save</Button>
+                    <Button variant='contained' size='medium' sx={{ width: 100 }} onClick={handleSaveClick}>save</Button>
                 </div>
                 <div className='overflow-auto destinations-numbers'>
                     <ul className='list-group list-group-numbered'>
@@ -173,22 +248,9 @@ function Destinations({ points, setPoints }) {
                     </ul>
                 </div>
                 <div className='footer'>
-                    <Button className='footer-button' color='error' onClick={() => {
-                        //ask for confirmation
-                        setPoints([]);
-                        setDestinations([]);
-                    }}>Clear Destinations</Button>
+                    <Button className='footer-button' color='error' onClick={handleClearClick}>Clear Destinations</Button>
                     {user &&
-                        <Button color='error' sx={{ marginLeft: '50px' }} onClick={() => {
-                            setPoints([]);
-                            setDestinations([]);
-                            setSaved(false);
-                            if (localStorage.getItem('id')) {
-                                updateTrip();
-                            }
-                            localStorage.removeItem('destinations');
-                            localStorage.removeItem('id');
-                        }}>Start New Trip</Button>
+                        <Button color='error' sx={{ marginLeft: '50px' }} onClick={handleNewClick}>Start New Trip</Button>
                     }
                 </div>
             </div>

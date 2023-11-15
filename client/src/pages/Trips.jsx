@@ -32,7 +32,7 @@ function Trips() {
     }, [user, trigger]);
 
     return (
-        <>
+        <div className='trips-container'>
             <h1>Trips</h1>
             <ul className='list-group'>
                 {trips && trips.map((trip) => (
@@ -41,7 +41,7 @@ function Trips() {
                     </li>
                 ))}
             </ul>
-        </>
+        </div>
     );
 }
 

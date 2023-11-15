@@ -2,7 +2,7 @@ import { TextField, Button, Popper, Box, ClickAwayListener } from '@mui/material
 import { useState, useEffect, useRef } from 'react';
 import Attraction from './Attraction';
 
-function Details({ notes, setNotes, handleClickNearby, nearby, nearbyAdded, handleClickNext, handleClickPrev, addToDestination, removeFromDestination }) {
+function Details({ notes, setNotes, handleClickNearby, nearby, foundNearby, nearbyAdded, handleClickNext, handleClickPrev, addToDestination, removeFromDestination, offset, total }) {
 
     const placement = (window.innerWidth < 769 ? 'right' : 'left'); //make popper appear on right for mobile
 
@@ -39,11 +39,11 @@ function Details({ notes, setNotes, handleClickNearby, nearby, nearbyAdded, hand
                     <Box sx={{ border: 1, p: 1, bgcolor: 'background.paper' }} className="box-attractions">
                         <div className='d-flex justify-content-between'>
                             <Button onClick={handleClickPrev}>previous</Button>
-                            {/* offset here and total? */}
+                            {offset} - {offset+5} of {total}
                             <Button onClick={handleClickNext}>next</Button>
                         </div>
                         <div className='overflow-auto' style={{ width: '100%' }}>
-                            {(nearby.length === 0 ? 'loading...' : null)}
+                            {(nearby.length === 0 && foundNearby) ? 'no nearby attractions' : (nearby.length === 0 ? 'loading...' : null)}
                             <ul className='list-group list-group-numbered'>
                                 {nearby.map((attraction, index) =>
                                     <Attraction key={attraction.img + index} attraction={attraction} addToDestination={addToDestination} removeFromDestination={removeFromDestination} added={false} />

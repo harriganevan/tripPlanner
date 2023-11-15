@@ -69,15 +69,6 @@ function Destination({ point, points, setPoints, destinations, setDestinations, 
         return noDuplicates;
     }
 
-    // const getFirstNearbyPage = async (nearbyNoDupes) => {
-    //     for (let i = 0; i < 5; i++) {
-    //         if (nearbyNoDupes[offset + i]) {
-    //             await (getAttractionDetails(nearbyNoDupes[offset + i].wikidata, nearbyNoDupes[offset + i].name));
-    //         }
-    //     }
-    //     await setDisplayedNearby(displayedAttractions.current);
-    // }
-
     const getNearbyPage = async (offset) => {
         displayedAttractions.current = [];
         for (let i = 0; i < 5; i++) {
@@ -86,6 +77,7 @@ function Destination({ point, points, setPoints, destinations, setDestinations, 
             }
         }
         setDisplayedNearby(displayedAttractions.current);
+        setFoundNearby(true);
     }
 
     const handleClickNearby = async () => {
@@ -100,8 +92,6 @@ function Destination({ point, points, setPoints, destinations, setDestinations, 
                 console.log(nearbyNoDupes);
                 nearby.current = nearbyNoDupes;
                 getNearbyPage(offset);
-                // setNearby(nearbyNoDupes); //maybe useRef so no rerender
-                setFoundNearby(true); //^
             }
         }
 
@@ -181,7 +171,7 @@ function Destination({ point, points, setPoints, destinations, setDestinations, 
                             <p style={{marginBottom: 0}}>Days</p>
                         </div>
                         <br />
-                        <Details notes={notes} setNotes={setNotes} point={point} handleClickNearby={handleClickNearby} handleClickNext={handleClickNext} handleClickPrev={handleClickPrev} nearby={displayedNearby} nearbyAdded={nearbyAdded} addToDestination={addToDestination} removeFromDestination={removeFromDestination} />
+                        <Details notes={notes} setNotes={setNotes} point={point} handleClickNearby={handleClickNearby} handleClickNext={handleClickNext} handleClickPrev={handleClickPrev} nearby={displayedNearby} foundNearby={foundNearby} nearbyAdded={nearbyAdded} addToDestination={addToDestination} removeFromDestination={removeFromDestination} offset={offset} total={nearby.current.length}/>
                     </Box>
                 </ClickAwayListener>
             </Popper>
