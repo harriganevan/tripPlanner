@@ -13,7 +13,7 @@ const TripSchema = new Schema({
             places: [
                 {
                     img: String,
-                    text: String,
+                    description: String,
                     name: String
                 }
             ]

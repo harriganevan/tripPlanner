@@ -23,12 +23,14 @@ function Destinations({ points, setPoints }) {
     }
 
     useEffect(() => {
+
         if (localStorage.getItem('id')) {
             setID(localStorage.getItem('id'));
             setSaved(true);
+        } else {
+            setSaved(false)
         }
         const destinations = JSON.parse(localStorage.getItem('destinations'));
-        console.log(JSON.parse(localStorage.getItem('destinations')));
         if (destinations) {
             var newPoints = [];
             for (let i = 0; i < destinations.length; i++) {
@@ -43,7 +45,7 @@ function Destinations({ points, setPoints }) {
 
         setLoading(false);
 
-    }, []);
+    }, [user]);
 
     const saveNewTrip = async () => {
 
@@ -139,10 +141,10 @@ function Destinations({ points, setPoints }) {
             )}
             {!user && (
                 <Dialog open={open} onClose={handleClose}>
-                    <DialogTitle>Signup or login to save trip</DialogTitle>
+                    <DialogTitle>Sign up or Log in to save trip</DialogTitle>
                     <DialogContent>
                         <DialogContentText>
-                            Click the login button in the top right if you already have an account. If you dont have an account, click the signup button.
+                            Click the 'Log in' button in the top right if you already have an account. If you don't have an account, click the 'Sign up' button.
                         </DialogContentText>
                     </DialogContent>
                 </Dialog>
@@ -171,9 +173,24 @@ function Destinations({ points, setPoints }) {
                     </ul>
                 </div>
                 <div className='footer'>
-                    <Button>Clear Destinations</Button>
+                    <Button className='footer-button' color='error' onClick={() => {
+                        //ask for confirmation
+                        setPoints([]);
+                        setDestinations([]);
+                    }}>Clear Destinations</Button>
+                    {user &&
+                        <Button color='error' sx={{ marginLeft: '50px' }} onClick={() => {
+                            setPoints([]);
+                            setDestinations([]);
+                            setSaved(false);
+                            if (localStorage.getItem('id')) {
+                                updateTrip();
+                            }
+                            localStorage.removeItem('destinations');
+                            localStorage.removeItem('id');
+                        }}>Start New Trip</Button>
+                    }
                 </div>
-                {/* add footer for clear trip and new trip */}
             </div>
         </>
     );

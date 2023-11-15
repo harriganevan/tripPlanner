@@ -14,7 +14,6 @@ function Trips() {
             console.log('weird')
             return
         }
-        console.log('what')
         const fetchTrips = async () => {
             const response = await fetch('http://localhost:5000/api/trips', {
                 headers: {
@@ -26,7 +25,6 @@ function Trips() {
             if (response.ok) {
                 setTrips(json);
             }
-
         }
 
         fetchTrips();

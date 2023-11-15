@@ -95,7 +95,6 @@ const getOTMResult = async (req, res) => {
 //responds with {imgURL: ..., description: ...} given wikidata ID
 const getAttractionDetails = async (req, res) => {
     const { wikidata } = req.params;
-
     const imageResponse = await fetch(`https://www.wikidata.org/w/api.php?action=wbgetclaims&entity=${wikidata}&property=P18&format=json`);
     const imageJson = await imageResponse.json();
     var imageURL;
@@ -106,7 +105,6 @@ const getAttractionDetails = async (req, res) => {
     } else {
         imageURL = `no image available`;
     }
-
     const titleResponse = await fetch(`https://www.wikidata.org/w/api.php?action=wbgetentities&ids=${wikidata}&props=sitelinks&format=json`);
     const titleJson = await titleResponse.json();
     var description;
@@ -130,9 +128,7 @@ const getAttractionDetails = async (req, res) => {
     } else {
         description = "no description available";
     }
-
     const value = { img: imageURL, description: description };
-
     res.json(value);
 }
 

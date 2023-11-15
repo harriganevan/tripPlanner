@@ -1,6 +1,5 @@
 import { useMapEvent, useMap } from 'react-leaflet/hooks'
-import { Marker } from 'react-leaflet'
-import icon from '../assets/marker'
+import { Marker, Popup } from 'react-leaflet'
 
 function LocationMarkers({ points, setPoints }) {
 
@@ -28,7 +27,10 @@ function LocationMarkers({ points, setPoints }) {
 
   return (
     <>
-      {points.map(marker => <Marker key={crypto.randomUUID()} position={marker} ></Marker>)}
+      {points.map((marker, index) =>
+        <Marker key={crypto.randomUUID()} position={marker}>
+          <Popup>{index + 1}</Popup>
+        </Marker>)}
     </>
   );
 }

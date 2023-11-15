@@ -39,6 +39,7 @@ function Details({ notes, setNotes, handleClickNearby, nearby, nearbyAdded, hand
                     <Box sx={{ border: 1, p: 1, bgcolor: 'background.paper' }} className="box-attractions">
                         <div className='d-flex justify-content-between'>
                             <Button onClick={handleClickPrev}>previous</Button>
+                            {/* offset here and total? */}
                             <Button onClick={handleClickNext}>next</Button>
                         </div>
                         <div className='overflow-auto' style={{ width: '100%' }}>

@@ -7,7 +7,7 @@ function Header() {
     const { logout } = useLogout();
     const { user } = useAuthContext();
 
-    const handleClick = () => {
+    const handleClickLogout = () => {
         logout();
     }
 
@@ -36,19 +36,19 @@ function Header() {
                                 <>
                                     <li className="nav-item">
                                         <Link to="/login" style={{ textDecoration: "none" }}>
-                                            <span className='navbar-text nav-link active'>Login</span>
+                                            <span className='navbar-text nav-link active'>Log in</span>
                                         </Link>
                                     </li>
                                     <li className="nav-item">
                                         <Link to="/signup" style={{ textDecoration: "none" }}>
-                                            <span className='navbar-text nav-link active'>Signup</span>
+                                            <span className='navbar-text nav-link active'>Sign up</span>
                                         </Link>
                                     </li>
                                 </>
                             )}
                             {user && (
                                 <li className="nav-item">
-                                    <button className='btn navbar-text nav-link active' onClick={handleClick}>Logout</button>
+                                    <button className='btn navbar-text nav-link active' onClick={handleClickLogout}>Log out</button>
                                 </li>
                             )}
                         </ul>

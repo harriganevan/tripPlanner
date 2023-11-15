@@ -11,7 +11,7 @@ function Home() {
             <Map points={points} setPoints={setPoints} />
             <Destinations points={points} setPoints={setPoints} />
         </div>
-    ); 
+    );
 }
 
 export default Home;

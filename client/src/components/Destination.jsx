@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Popper, Box, Button, ClickAwayListener, Input } from '@mui/material';
 import Details from './Details';
 
@@ -6,7 +6,8 @@ function Destination({ point, points, setPoints, destinations, setDestinations, 
 
     const placement = (window.innerWidth < 769 ? 'right' : 'left'); //make popper appear on right for mobile
 
-    const [nearby, setNearby] = useState([]); //all nearby attractions for destination
+    // const [nearby, setNearby] = useState([]); //all nearby attractions for destination
+    const nearby = useRef([]);
     const [displayedNearby, setDisplayedNearby] = useState([]); //tracks attractions to display
     const [foundNearby, setFoundNearby] = useState(false); //tracks if api call has already been made for this destination
     const [offset, setOffset] = useState(0)
@@ -17,8 +18,8 @@ function Destination({ point, points, setPoints, destinations, setDestinations, 
 
     const [anchorEl, setAnchorEl] = useState(null); //anchor for poppers
 
-    var displayedAttractions = [];
-
+    const displayedAttractions = useRef([]);
+    
     useEffect(() => {
 
         var seen = false;
@@ -68,22 +69,23 @@ function Destination({ point, points, setPoints, destinations, setDestinations, 
         return noDuplicates;
     }
 
-    const getFirstNearbyPage = async (nearbyNoDupes) => {
-        for (let i = 0; i < 5; i++) {
-            if (nearbyNoDupes[offset + i]) {
-                await (getAttractionDetails(nearbyNoDupes[offset + i].wikidata, nearbyNoDupes[offset + i].name));
-            }
-        }
-        await (setDisplayedNearby(displayedAttractions));
-    }
+    // const getFirstNearbyPage = async (nearbyNoDupes) => {
+    //     for (let i = 0; i < 5; i++) {
+    //         if (nearbyNoDupes[offset + i]) {
+    //             await (getAttractionDetails(nearbyNoDupes[offset + i].wikidata, nearbyNoDupes[offset + i].name));
+    //         }
+    //     }
+    //     await setDisplayedNearby(displayedAttractions.current);
+    // }
 
     const getNearbyPage = async (offset) => {
+        displayedAttractions.current = [];
         for (let i = 0; i < 5; i++) {
-            if (nearby[offset + i]) {
-                await (getAttractionDetails(nearby[offset + i].wikidata, nearby[offset + i].name));
+            if (nearby.current[offset + i]) {
+                await (getAttractionDetails(nearby.current[offset + i].wikidata, nearby.current[offset + i].name));
             }
         }
-        await (setDisplayedNearby(displayedAttractions));
+        setDisplayedNearby(displayedAttractions.current);
     }
 
     const handleClickNearby = async () => {
@@ -96,11 +98,11 @@ function Destination({ point, points, setPoints, destinations, setDestinations, 
             if (response.ok) {
                 var nearbyNoDupes = removeDuplicates(nearbyAttractions);
                 console.log(nearbyNoDupes);
-                getFirstNearbyPage(nearbyNoDupes);
-                setNearby(nearbyNoDupes);
-                setFoundNearby(true);
+                nearby.current = nearbyNoDupes;
+                getNearbyPage(offset);
+                // setNearby(nearbyNoDupes); //maybe useRef so no rerender
+                setFoundNearby(true); //^
             }
-
         }
 
         console.log(nearby);
@@ -113,7 +115,7 @@ function Destination({ point, points, setPoints, destinations, setDestinations, 
         const response = await fetch(`http://localhost:5000/api/details/${wikidata}`);
         let json = await response.json();
         json = { ...json, name: name };
-        displayedAttractions.push(json);
+        displayedAttractions.current.push(json);
     }
 
     const addToDestination = (attraction) => {
@@ -172,11 +174,11 @@ function Destination({ point, points, setPoints, destinations, setDestinations, 
                 <ClickAwayListener onClickAway={handleClickAway}>
                     <Box sx={{ border: 1, p: 1, bgcolor: 'background.paper' }} className="box">
                         add stuff to your {point.name} destination here <br /><br />
-                        <div className='d-flex justify-conntent-start'>
+                        <div className='d-flex'>
                             <Input type='number'
                                 defaultValue={days}
                                 onChange={(e) => Number(e.target.value) > 0 ? setDays(e.target.value) : setDays('0')} />
-                            <p>Days</p>
+                            <p style={{marginBottom: 0}}>Days</p>
                         </div>
                         <br />
                         <Details notes={notes} setNotes={setNotes} point={point} handleClickNearby={handleClickNearby} handleClickNext={handleClickNext} handleClickPrev={handleClickPrev} nearby={displayedNearby} nearbyAdded={nearbyAdded} addToDestination={addToDestination} removeFromDestination={removeFromDestination} />
