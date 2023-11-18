@@ -7,7 +7,7 @@ function Details({ notes, setNotes, handleClickNearby, nearby, foundNearby, near
     const placement = (window.innerWidth < 769 ? 'right' : 'left'); //make popper appear on right for mobile
 
     const [anchorEl, setAnchorEl] = useState(null); //anchor for poppers
-    const [foundNearbyNotEmpty, setFoundNearbyNotEmpty] = useState(nearby.length !== 0 && foundNearby);
+    const [foundNearbyNotEmpty, setFoundNearbyNotEmpty] = useState(false);
 
     useEffect(() => {
         setFoundNearbyNotEmpty(foundNearbyNotEmpty || nearby.length !== 0 && foundNearby)

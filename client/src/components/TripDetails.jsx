@@ -25,47 +25,57 @@ function TripDetails({ trip, setTrigger, trigger }) {
             return
         }
 
-        const response = await fetch(`http://localhost:5000/api/${trip._id}`, {
-            method: 'DELETE',
-            headers: {
-                'Authorization': `Bearer ${user.token}`
+        try {
+            const response = await fetch(`http://localhost:5000/api/${trip._id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${user.token}`
+                }
+            });
+            if (response.ok) {
+                const json = await response.json();
+                console.log(json);
+                console.log('trip deleted');
+                setTrigger(!trigger);
+            } else {
+                throw new Error(response.status);
             }
-        })
-        const json = await response.json();
-        console.log(json);
-        if (response.ok) {
-            console.log('trip deleted');
-            setTrigger(!trigger);
-        } else {
-            console.log('uhoh')
+        } catch (error) {
+            console.error(error);
         }
+
     }
 
     const handleDeleteClickFinalNo = () => {
         setDeleteOpen(false);
     }
 
-    const handleOpenClick= async () => {
+    const handleOpenClick = async () => {
 
         if (!user) {
             return
         }
 
-        const response = await fetch(`http://localhost:5000/api/${trip._id}`, {
-            headers: {
-                'Authorization': `Bearer ${user.token}`
+        try {
+            const response = await fetch(`http://localhost:5000/api/${trip._id}`, {
+                headers: {
+                    'Authorization': `Bearer ${user.token}`
+                }
+            });
+            if (response.ok) {
+                const json = await response.json();
+                console.log(json);
+                console.log('trip loaded');
+                localStorage.setItem('id', json._id);
+                localStorage.setItem('destinations', JSON.stringify(json.destinations));
+                navigate('/');
+            } else {
+                throw new Error(response.status);
             }
-        })
-        const json = await response.json();
-        console.log(json);
-        if (response.ok) {
-            console.log('trip loaded');
-            localStorage.setItem('id', json._id);
-            localStorage.setItem('destinations', JSON.stringify(json.destinations));
-            navigate('/');
-        } else {
-            console.log('uhoh');
+        } catch (error) {
+            console.error(error);
         }
+
     }
 
     return (

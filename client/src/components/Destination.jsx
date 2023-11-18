@@ -19,7 +19,7 @@ function Destination({ point, points, setPoints, destinations, setDestinations, 
     const [anchorEl, setAnchorEl] = useState(null); //anchor for poppers
 
     const displayedAttractions = useRef([]);
-    
+
     useEffect(() => {
 
         var seen = false;
@@ -81,31 +81,40 @@ function Destination({ point, points, setPoints, destinations, setDestinations, 
     }
 
     const handleClickNearby = async () => {
-
         if (!foundNearby) {
-            console.log('sending api request');
-            const response = await fetch(`http://localhost:5000/api/otmAPI/radius/radius=5000&lon=${point.lng}&lat=${point.lat}&rate=3&limit=200&format=json`);
-            const nearbyAttractions = await response.json();
-
-            if (response.ok) {
-                var nearbyNoDupes = removeDuplicates(nearbyAttractions);
-                console.log(nearbyNoDupes);
-                nearby.current = nearbyNoDupes;
-                getNearbyPage(offset);
+            try {
+                console.log('sending api request');
+                const response = await fetch(`http://localhost:5000/api/otmAPI/radius/radius=5000&lon=${point.lng}&lat=${point.lat}&rate=3&limit=200&format=json`);
+                if (response.ok) {
+                    const nearbyAttractions = await response.json();
+                    let nearbyNoDupes = removeDuplicates(nearbyAttractions);
+                    console.log(nearbyNoDupes);
+                    nearby.current = nearbyNoDupes;
+                    getNearbyPage(offset);
+                } else {
+                    throw new Error(response.status);
+                }
+            } catch (error) {
+                console.error(error)
             }
         }
-
-        console.log(nearby);
-        console.log(displayedNearby);
     }
 
-    //make async function that gets image - call it 5 times from somewhere else
     const getAttractionDetails = async (wikidata, name) => {
-        console.log('sending api request');
-        const response = await fetch(`http://localhost:5000/api/details/${wikidata}`);
-        let json = await response.json();
-        json = { ...json, name: name };
-        displayedAttractions.current.push(json);
+        try {
+            console.log('sending api request');
+            const response = await fetch(`http://localhost:5000/api/details/${wikidata}`);
+            if (response.ok) {
+                let json = await response.json();
+                json = { ...json, name: name };
+                console.log(json)
+                displayedAttractions.current.push(json);
+            } else {
+                throw new Error(response.status);
+            }
+        } catch (error) {
+            console.error(error);
+        }
     }
 
     const addToDestination = (attraction) => {
@@ -163,17 +172,17 @@ function Destination({ point, points, setPoints, destinations, setDestinations, 
             <Popper id={id} open={open} anchorEl={(placement == 'left') ? anchorEl : null} placement={placement} className='popper'>
                 <ClickAwayListener onClickAway={handleClickAway}>
                     <Box sx={{ border: 1, p: 1, bgcolor: 'background.paper' }} className="box">
-                        {(placement == 'right') && <><button onClick={() => {setAnchorEl(null)}}>Close</button><br /></>} 
+                        {(placement == 'right') && <><button onClick={() => { setAnchorEl(null) }}>Close</button><br /></>}
                         add stuff to your {point.name} destination here <br /><br />
                         {/* move this to details? */}
                         <div className='d-flex'>
                             <Input type='number'
                                 defaultValue={days}
                                 onChange={(e) => Number(e.target.value) > 0 ? setDays(e.target.value) : setDays('0')} />
-                            <p style={{marginBottom: 0}}>Days</p>
+                            <p style={{ marginBottom: 0 }}>Days</p>
                         </div>
                         <br />
-                        <Details notes={notes} setNotes={setNotes} point={point} handleClickNearby={handleClickNearby} handleClickNext={handleClickNext} handleClickPrev={handleClickPrev} nearby={displayedNearby} foundNearby={foundNearby} nearbyAdded={nearbyAdded} addToDestination={addToDestination} removeFromDestination={removeFromDestination} offset={offset} total={nearby.current.length}/>
+                        <Details notes={notes} setNotes={setNotes} point={point} handleClickNearby={handleClickNearby} handleClickNext={handleClickNext} handleClickPrev={handleClickPrev} nearby={displayedNearby} foundNearby={foundNearby} nearbyAdded={nearbyAdded} addToDestination={addToDestination} removeFromDestination={removeFromDestination} offset={offset} total={nearby.current.length} />
                     </Box>
                 </ClickAwayListener>
             </Popper>

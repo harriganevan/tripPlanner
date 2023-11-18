@@ -55,22 +55,26 @@ function Destinations({ points, setPoints }) {
             return
         }
 
-        const response = await fetch(`http://localhost:5000/api/trips/`, {
-            method: 'POST',
-            body: JSON.stringify({ tripName, destinations }),
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${user.token}`
+        try {
+            const response = await fetch(`http://localhost:5000/api/trips/`, {
+                method: 'POST',
+                body: JSON.stringify({ tripName, destinations }),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${user.token}`
+                }
+            });
+            if (response.ok) {
+                const json = await response.json();
+                console.log(json);
+                console.log('new trip added');
+                setSaved(true);
+                setID(json._id);
+            } else {
+                throw new Error(response.status);
             }
-        })
-        const json = await response.json();
-        console.log(json);
-        if (response.ok) {
-            setSaved(true);
-            console.log('new trip added');
-            setID(json._id);
-        } else {
-            console.log('uhoh')
+        } catch (error) {
+            console.error(error);
         }
 
         //add save successful banner
@@ -82,20 +86,24 @@ function Destinations({ points, setPoints }) {
             return
         }
 
-        const response = await fetch(`http://localhost:5000/api/${id}`, {
-            method: 'PATCH',
-            body: JSON.stringify({ tripName, destinations }),
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${user.token}`
+        try {
+            const response = await fetch(`http://localhost:5000/api/${id}`, {
+                method: 'PATCH',
+                body: JSON.stringify({ tripName, destinations }),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${user.token}`
+                }
+            });
+            if (response.ok) {
+                const json = await response.json();
+                console.log(json);
+                console.log('trip edited');
+            } else {
+                throw new Error(response.status);
             }
-        })
-        const json = await response.json();
-        console.log(json);
-        if (response.ok) {
-            console.log('trip edited');
-        } else {
-            console.log('uhoh')
+        } catch (error) {
+            console.error(error);
         }
 
         //add save successful banner
@@ -227,7 +235,7 @@ function Destinations({ points, setPoints }) {
             <div className='col-sm-3 destinations '>
                 <div className='d-flex justify-content-between destinations-header'>
                     <h1>Destinations</h1>
-                    <Button variant='contained' size='medium' sx={{ width: 100, marginTop: '5px', marginBottom: '5px'}} onClick={handleSaveClick}>save</Button>
+                    <Button variant='contained' size='medium' sx={{ width: 100, marginTop: '5px', marginBottom: '5px' }} onClick={handleSaveClick}>save</Button>
                 </div>
                 <div className='overflow-auto destinations-numbers'>
                     <ul className='list-group list-group-numbered'>

@@ -11,19 +11,24 @@ function Trips() {
     useEffect(() => {
 
         if (!user) {
-            console.log('weird')
             return
         }
-        const fetchTrips = async () => {
-            const response = await fetch('http://localhost:5000/api/trips', {
-                headers: {
-                    'Authorization': `Bearer ${user.token}`
-                }
-            });
-            const json = await response.json();
 
-            if (response.ok) {
-                setTrips(json);
+        const fetchTrips = async () => {
+            try {
+                const response = await fetch('http://localhost:5000/api/trips', {
+                    headers: {
+                        'Authorization': `Bearer ${user.token}`
+                    }
+                });
+                if (response.ok) {
+                    const json = await response.json();
+                    setTrips(json);
+                } else {
+                    throw new Error(response.status);
+                }
+            } catch (error) {
+                console.error(error);
             }
         }
 

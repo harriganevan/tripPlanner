@@ -11,7 +11,8 @@ const username = process.env.GEONAMES_USERNAME
 const getTrips = async (req, res) => {
     const user_id = req.user._id;
     const trips = await Trip.find({ user_id });
-    res.json(trips);
+    //add if none is found
+    res.status(200).json(trips);
 }
 
 //get one trip
