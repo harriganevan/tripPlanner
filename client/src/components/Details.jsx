@@ -7,6 +7,11 @@ function Details({ notes, setNotes, handleClickNearby, nearby, foundNearby, near
     const placement = (window.innerWidth < 769 ? 'right' : 'left'); //make popper appear on right for mobile
 
     const [anchorEl, setAnchorEl] = useState(null); //anchor for poppers
+    const [foundNearbyNotEmpty, setFoundNearbyNotEmpty] = useState(nearby.length !== 0 && foundNearby);
+
+    useEffect(() => {
+        setFoundNearbyNotEmpty(foundNearbyNotEmpty || nearby.length !== 0 && foundNearby)
+    }, [nearby])
 
     const open = Boolean(anchorEl);
 
@@ -30,20 +35,21 @@ function Details({ notes, setNotes, handleClickNearby, nearby, foundNearby, near
                 onChange={(e) => setNotes(e.target.value)}
                 defaultValue={notes}
                 multiline={true}
-                rows={6}
+                rows={(placement == 'right') ? 3 : 6}
             />
             <br />
             <Button aria-describedby={id} type="button" onClick={handleClick}>find nearby attractions</Button>
-            <Popper id={id} open={open} anchorEl={anchorEl} placement={placement} className='popper'>
+            <Popper id={id} open={open} anchorEl={(placement == 'left') ? anchorEl : null} placement={placement} className='popper'>
                 <ClickAwayListener onClickAway={handleClickAway}>
                     <Box sx={{ border: 1, p: 1, bgcolor: 'background.paper' }} className="box-attractions">
+                        {(placement == 'right') && <><button onClick={() => { setAnchorEl(null) }}>Close</button><br /></>}
                         <div className='d-flex justify-content-between'>
                             <Button onClick={handleClickPrev}>previous</Button>
-                            {offset} - {offset+5} of {total}
+                            {offset} - {offset + 5} of {total}
                             <Button onClick={handleClickNext}>next</Button>
                         </div>
                         <div className='overflow-auto' style={{ width: '100%' }}>
-                            {(nearby.length === 0 && foundNearby) ? 'no nearby attractions' : (nearby.length === 0 ? 'loading...' : null)}
+                            {(nearby.length === 0 && foundNearby && !foundNearbyNotEmpty) ? 'no nearby attractions' : (nearby.length === 0 ? 'loading...' : null)}
                             <ul className='list-group list-group-numbered'>
                                 {nearby.map((attraction, index) =>
                                     <Attraction key={attraction.img + index} attraction={attraction} addToDestination={addToDestination} removeFromDestination={removeFromDestination} added={false} />

@@ -79,7 +79,7 @@ body {
     border-bottom: 0 !important;
 }
 
-.footer-button{
+.footer-button {
     padding: 20px !important;
 }
 
@@ -96,6 +96,32 @@ body {
 }
 
 @media screen and (max-width: 768px) {
+    .popper {
+        z-index: 9999;
+        height: 100%;
+        padding-top: 55px;
+        top: 0;
+        width: 100vw;
+    }
+
+    .box {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        margin-right: 0;
+        border-top: 0 !important;
+        border-bottom: 0 !important;
+    }
+
+    .box-attractions {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        margin-right: 0;
+        border-top: 0 !important;
+        border-bottom: 0 !important;
+    }
+
     .leaflet-container {
         height: 50vh;
     }

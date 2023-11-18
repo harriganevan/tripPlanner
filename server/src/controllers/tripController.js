@@ -97,9 +97,10 @@ const getOTMResult = async (req, res) => {
 //responds with {imgURL: ..., description: ...} given wikidata ID
 const getAttractionDetails = async (req, res) => {
     const { wikidata } = req.params;
+
+    var imageURL;
     const imageResponse = await fetch(`https://www.wikidata.org/w/api.php?action=wbgetclaims&entity=${wikidata}&property=P18&format=json`);
     const imageJson = await imageResponse.json();
-    var imageURL;
     if (imageJson.claims && imageJson.claims.P18) {
         const imageNameNoSpace = (imageJson.claims.P18[0].mainsnak.datavalue.value).replace(/ /g, "_");
         const hashedImage = md5(imageNameNoSpace);
@@ -107,9 +108,10 @@ const getAttractionDetails = async (req, res) => {
     } else {
         imageURL = `no image available`;
     }
+
+    var description;
     const titleResponse = await fetch(`https://www.wikidata.org/w/api.php?action=wbgetentities&ids=${wikidata}&props=sitelinks&format=json`);
     const titleJson = await titleResponse.json();
-    var description;
     if (titleJson.entities[wikidata].sitelinks.enwiki) {
         const titleResponseNoSpace = (titleJson.entities[wikidata].sitelinks.enwiki.title).replace(/ /g, "_");
         const descriptionResponse = await fetch(`https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro&explaintext&redirects=1&titles=${titleResponseNoSpace}`);
@@ -130,10 +132,13 @@ const getAttractionDetails = async (req, res) => {
     } else {
         description = "no description available";
     }
+
     const value = { img: imageURL, description: description };
+
     res.status(200).json(value);
 }
 
+//responds with nearest city with pop > 15000
 const getCityName = async (req, res) => {
     const { lat, lng } = req.params;
     const nameResponse = await fetch(`https://secure.geonames.org/findNearbyPlaceNameJSON?lat=${lat}&lng=${lng}&cities=cities15000&username=${username}`);

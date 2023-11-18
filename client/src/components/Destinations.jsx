@@ -227,7 +227,7 @@ function Destinations({ points, setPoints }) {
             <div className='col-sm-3 destinations '>
                 <div className='d-flex justify-content-between destinations-header'>
                     <h1>Destinations</h1>
-                    <Button variant='contained' size='medium' sx={{ width: 100 }} onClick={handleSaveClick}>save</Button>
+                    <Button variant='contained' size='medium' sx={{ width: 100, marginTop: '5px', marginBottom: '5px'}} onClick={handleSaveClick}>save</Button>
                 </div>
                 <div className='overflow-auto destinations-numbers'>
                     <ul className='list-group list-group-numbered'>

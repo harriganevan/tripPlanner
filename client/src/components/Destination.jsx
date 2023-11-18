@@ -160,10 +160,12 @@ function Destination({ point, points, setPoints, destinations, setDestinations, 
             <Button aria-describedby={id} type="button" onClick={handleClick}>
                 Edit Destination
             </Button>
-            <Popper id={id} open={open} anchorEl={anchorEl} placement={placement} className='popper'>
+            <Popper id={id} open={open} anchorEl={(placement == 'left') ? anchorEl : null} placement={placement} className='popper'>
                 <ClickAwayListener onClickAway={handleClickAway}>
                     <Box sx={{ border: 1, p: 1, bgcolor: 'background.paper' }} className="box">
+                        {(placement == 'right') && <><button onClick={() => {setAnchorEl(null)}}>Close</button><br /></>} 
                         add stuff to your {point.name} destination here <br /><br />
+                        {/* move this to details? */}
                         <div className='d-flex'>
                             <Input type='number'
                                 defaultValue={days}
