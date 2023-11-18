@@ -5,8 +5,6 @@ import { useState } from 'react';
 
 function TripDetails({ trip, setTrigger, trigger }) {
 
-    console.log(trip)
-
     const { user } = useAuthContext();
     const [deleteOpen, setDeleteOpen] = useState(false);
 
@@ -34,8 +32,6 @@ function TripDetails({ trip, setTrigger, trigger }) {
             });
             const json = await response.json();
             if (response.ok) {
-                console.log(json);
-                console.log('trip deleted');
                 setTrigger(!trigger);
             } else {
                 throw new Error(response.status + ' ' + json.error);
@@ -64,8 +60,6 @@ function TripDetails({ trip, setTrigger, trigger }) {
             });
             const json = await response.json();
             if (response.ok) {
-                console.log(json);
-                console.log('trip loaded');
                 localStorage.setItem('id', json._id);
                 localStorage.setItem('destinations', JSON.stringify(json.destinations));
                 navigate('/');

@@ -83,12 +83,10 @@ function Destination({ point, points, setPoints, destinations, setDestinations, 
     const handleClickNearby = async () => {
         if (!foundNearby) {
             try {
-                console.log('sending api request');
                 const response = await fetch(`http://localhost:5000/api/otmAPI/radius/radius=5000&lon=${point.lng}&lat=${point.lat}&rate=3&limit=200&format=json`);
                 const json = await response.json();
                 if (response.ok) {
                     let nearbyNoDupes = removeDuplicates(json);
-                    console.log(nearbyNoDupes);
                     nearby.current = nearbyNoDupes;
                     getNearbyPage(offset);
                 } else {
@@ -102,12 +100,10 @@ function Destination({ point, points, setPoints, destinations, setDestinations, 
 
     const getAttractionDetails = async (wikidata, name) => {
         try {
-            console.log('sending api request');
             const response = await fetch(`http://localhost:5000/api/details/${wikidata}`);
             if (response.ok) {
                 let json = await response.json();
                 json = { ...json, name: name };
-                console.log(json)
                 displayedAttractions.current.push(json);
             } else {
                 throw new Error(response.status);
@@ -127,7 +123,6 @@ function Destination({ point, points, setPoints, destinations, setDestinations, 
         if (!seen) {
             setNearbyAdded([...nearbyAdded, attraction]);
         }
-        console.log(nearbyAdded)
     }
 
     const removeFromDestination = (attraction) => {

@@ -67,8 +67,6 @@ function Destinations({ points, setPoints }) {
             });
             const json = await response.json();
             if (response.ok) {
-                console.log(json);
-                console.log('new trip added');
                 setSaved(true);
                 setID(json._id);
                 alert.show('save successful');
@@ -78,7 +76,7 @@ function Destinations({ points, setPoints }) {
         } catch (error) {
             console.error(error);
         }
-        
+
     }
 
     const updateTrip = async () => {
@@ -98,8 +96,6 @@ function Destinations({ points, setPoints }) {
             });
             const json = await response.json();
             if (response.ok) {
-                console.log(json);
-                console.log('trip edited');
                 alert.show('save successful');
             } else {
                 throw new Error(response.status + ' ' + json.error);
@@ -107,7 +103,7 @@ function Destinations({ points, setPoints }) {
         } catch (error) {
             console.error(error);
         }
-        
+
     }
 
     //handle save click
@@ -259,7 +255,7 @@ function Destinations({ points, setPoints }) {
                 <div className='footer'>
                     <Button className='footer-button' color='error' onClick={handleClearClick}>Clear Destinations</Button>
                     {user &&
-                        <Button color='error' sx={{ marginLeft: '50px' }} onClick={handleNewClick}>Start New Trip</Button>
+                        <Button className='footer-button' color='error' sx={{ marginLeft: '50px' }} onClick={handleNewClick}>Start New Trip</Button>
                     }
                 </div>
             </div>
