@@ -21,11 +21,11 @@ function Trips() {
                         'Authorization': `Bearer ${user.token}`
                     }
                 });
+                const json = await response.json();
                 if (response.ok) {
-                    const json = await response.json();
                     setTrips(json);
                 } else {
-                    throw new Error(response.status);
+                    throw new Error(response.status + ' ' + json.error);
                 }
             } catch (error) {
                 console.error(error);

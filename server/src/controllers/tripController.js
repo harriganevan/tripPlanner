@@ -11,7 +11,9 @@ const username = process.env.GEONAMES_USERNAME
 const getTrips = async (req, res) => {
     const user_id = req.user._id;
     const trips = await Trip.find({ user_id });
-    //add if none is found
+    if (!trips) {
+        return res.status(400).json({ error: "could not find trips" });
+    }
     res.status(200).json(trips);
 }
 
@@ -143,6 +145,7 @@ const getAttractionDetails = async (req, res) => {
 const getCityName = async (req, res) => {
     const { lat, lng } = req.params;
     const nameResponse = await fetch(`https://secure.geonames.org/findNearbyPlaceNameJSON?lat=${lat}&lng=${lng}&cities=cities15000&username=${username}`);
+    //if response ok check
     const nameJson = await nameResponse.json();
     var name = '';
     if (nameJson.geonames && nameJson.geonames[0]) {

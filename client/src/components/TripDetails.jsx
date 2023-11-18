@@ -32,13 +32,13 @@ function TripDetails({ trip, setTrigger, trigger }) {
                     'Authorization': `Bearer ${user.token}`
                 }
             });
+            const json = await response.json();
             if (response.ok) {
-                const json = await response.json();
                 console.log(json);
                 console.log('trip deleted');
                 setTrigger(!trigger);
             } else {
-                throw new Error(response.status);
+                throw new Error(response.status + ' ' + json.error);
             }
         } catch (error) {
             console.error(error);
@@ -62,15 +62,15 @@ function TripDetails({ trip, setTrigger, trigger }) {
                     'Authorization': `Bearer ${user.token}`
                 }
             });
+            const json = await response.json();
             if (response.ok) {
-                const json = await response.json();
                 console.log(json);
                 console.log('trip loaded');
                 localStorage.setItem('id', json._id);
                 localStorage.setItem('destinations', JSON.stringify(json.destinations));
                 navigate('/');
             } else {
-                throw new Error(response.status);
+                throw new Error(response.status + ' ' + json.error);
             }
         } catch (error) {
             console.error(error);

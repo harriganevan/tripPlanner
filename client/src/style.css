@@ -95,6 +95,11 @@ body {
     margin-top: 15px;
 }
 
+#__react-alert__ {
+    position: relative;
+    z-index: 99999;
+}
+
 @media screen and (max-width: 768px) {
     .popper {
         z-index: 9999;

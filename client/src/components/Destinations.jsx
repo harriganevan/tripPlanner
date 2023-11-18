@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Button, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import Destination from './Destination.jsx';
 import useAuthContext from '../hooks/useAuthContext.jsx';
+import { useAlert } from 'react-alert';
 import { LatLng } from 'leaflet';
 
 function Destinations({ points, setPoints }) {
@@ -10,6 +11,7 @@ function Destinations({ points, setPoints }) {
     //then if local storage has id - setID(localStorage'id')
 
     const { user } = useAuthContext();
+    const alert = useAlert();
 
     const [saveOpen, setSaveOpen] = useState(false);
     const [clearOpen, setClearOpen] = useState(false);
@@ -50,7 +52,6 @@ function Destinations({ points, setPoints }) {
     }, [user]);
 
     const saveNewTrip = async () => {
-
         if (!user) {
             return
         }
@@ -64,20 +65,20 @@ function Destinations({ points, setPoints }) {
                     'Authorization': `Bearer ${user.token}`
                 }
             });
+            const json = await response.json();
             if (response.ok) {
-                const json = await response.json();
                 console.log(json);
                 console.log('new trip added');
                 setSaved(true);
                 setID(json._id);
+                alert.show('save successful');
             } else {
-                throw new Error(response.status);
+                throw new Error(response.status + ' ' + json.error);
             }
         } catch (error) {
             console.error(error);
         }
-
-        //add save successful banner
+        
     }
 
     const updateTrip = async () => {
@@ -95,18 +96,18 @@ function Destinations({ points, setPoints }) {
                     'Authorization': `Bearer ${user.token}`
                 }
             });
+            const json = await response.json();
             if (response.ok) {
-                const json = await response.json();
                 console.log(json);
                 console.log('trip edited');
+                alert.show('save successful');
             } else {
-                throw new Error(response.status);
+                throw new Error(response.status + ' ' + json.error);
             }
         } catch (error) {
             console.error(error);
         }
-
-        //add save successful banner
+        
     }
 
     //handle save click

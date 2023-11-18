@@ -85,14 +85,14 @@ function Destination({ point, points, setPoints, destinations, setDestinations, 
             try {
                 console.log('sending api request');
                 const response = await fetch(`http://localhost:5000/api/otmAPI/radius/radius=5000&lon=${point.lng}&lat=${point.lat}&rate=3&limit=200&format=json`);
+                const json = await response.json();
                 if (response.ok) {
-                    const nearbyAttractions = await response.json();
-                    let nearbyNoDupes = removeDuplicates(nearbyAttractions);
+                    let nearbyNoDupes = removeDuplicates(json);
                     console.log(nearbyNoDupes);
                     nearby.current = nearbyNoDupes;
                     getNearbyPage(offset);
                 } else {
-                    throw new Error(response.status);
+                    throw new Error(response.status + ' ' + json.error);
                 }
             } catch (error) {
                 console.error(error)
