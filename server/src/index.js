@@ -16,8 +16,8 @@ app.use(express.json());
 app.use('/', routes);
 
 mongoose.connect(process.env.ATLAS_URI).then(() => {
-  app.listen(443, () => {
-    console.log('listening on port 443');
+  app.listen(5000, () => {
+    console.log('listening on port 5000');
   });
 }).catch((error) => {
   console.log(error);
