@@ -27,7 +27,7 @@ function LeafletControlGeocoder({ points, setPoints }) {
     const handleUpdate = async (latlng) => {
         if (!containsObject(latlng, points)) {
             try {
-                const response = await fetch(`http://localhost:5000/api/getCityName/${latlng.lat}/${latlng.lng}`);
+                const response = await fetch(`https://tripplanner-api.onrender.com:443/api/getCityName/${latlng.lat}/${latlng.lng}`);
                 if (response.ok) {
                     const name = await response.json();
                     latlng.name = name;

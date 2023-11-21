@@ -16,7 +16,7 @@ function Trips() {
 
         const fetchTrips = async () => {
             try {
-                const response = await fetch('http://localhost:5000/api/trips', {
+                const response = await fetch('https://tripplanner-api.onrender.com/api/trips', {
                     headers: {
                         'Authorization': `Bearer ${user.token}`
                     }

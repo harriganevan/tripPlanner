@@ -18,7 +18,7 @@ function LocationMarkers({ points, setPoints }) {
     async click(e) {
       if (!containsObject(e.latlng, points)) {
         try {
-          const response = await fetch(`http://localhost:5000/api/getCityName/${e.latlng.lat}/${e.latlng.lng}`);
+          const response = await fetch(`https://tripplanner-api.onrender.com/api/getCityName/${e.latlng.lat}/${e.latlng.lng}`);
           if (response.ok) {
             const name = await response.json();
             e.latlng.name = name;

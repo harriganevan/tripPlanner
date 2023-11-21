@@ -57,7 +57,7 @@ function Destinations({ points, setPoints }) {
         }
 
         try {
-            const response = await fetch(`http://localhost:5000/api/trips/`, {
+            const response = await fetch(`https://tripplanner-api.onrender.com/api/trips/`, {
                 method: 'POST',
                 body: JSON.stringify({ tripName, destinations }),
                 headers: {
@@ -86,7 +86,7 @@ function Destinations({ points, setPoints }) {
         }
 
         try {
-            const response = await fetch(`http://localhost:5000/api/${id}`, {
+            const response = await fetch(`https://tripplanner-api.onrender.com/api/${id}`, {
                 method: 'PATCH',
                 body: JSON.stringify({ tripName, destinations }),
                 headers: {

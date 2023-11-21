@@ -24,7 +24,7 @@ function TripDetails({ trip, setTrigger, trigger }) {
         }
 
         try {
-            const response = await fetch(`http://localhost:5000/api/${trip._id}`, {
+            const response = await fetch(`https://tripplanner-api.onrender.com/api/${trip._id}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${user.token}`
@@ -53,7 +53,7 @@ function TripDetails({ trip, setTrigger, trigger }) {
         }
 
         try {
-            const response = await fetch(`http://localhost:5000/api/${trip._id}`, {
+            const response = await fetch(`https://tripplanner-api.onrender.com/api/${trip._id}`, {
                 headers: {
                     'Authorization': `Bearer ${user.token}`
                 }
