@@ -7,6 +7,8 @@ import { disableReactDevTools } from '@fvilers/disable-react-devtools'
 import AlertTemplate from 'react-alert-template-basic';
 import "./style.css";
 import "leaflet/dist/leaflet.css";
+import "leaflet/dist/images/marker-shadow.png";
+import "leaflet/dist/images/marker-icon.png";
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
