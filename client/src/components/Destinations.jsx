@@ -255,7 +255,7 @@ function Destinations({ points, setPoints }) {
                 <div className='footer'>
                     <Button className='footer-button' color='error' onClick={handleClearClick}>Clear Destinations</Button>
                     {user &&
-                        <Button className='footer-button' color='error' sx={{ marginLeft: '50px' }} onClick={handleNewClick}>Start New Trip</Button>
+                        <Button className='footer-button' color='error' onClick={handleNewClick}>Start New Trip</Button>
                     }
                 </div>
             </div>

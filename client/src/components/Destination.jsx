@@ -173,6 +173,7 @@ function Destination({ point, points, setPoints, destinations, setDestinations, 
                         <div className='d-flex'>
                             <Input type='number'
                                 defaultValue={days}
+                                name='days'
                                 onChange={(e) => Number(e.target.value) > 0 ? setDays(e.target.value) : setDays('0')} />
                             <p style={{ marginBottom: 0 }}>Days</p>
                         </div>

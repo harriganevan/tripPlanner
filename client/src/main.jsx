@@ -2,7 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './components/App.jsx';
 import { AuthContextProvider } from './context/AuthContext.jsx';
-import { transitions, positions, Provider as AlertProvider } from 'react-alert';
+import { Provider as AlertProvider } from 'react-alert';
+import { disableReactDevTools } from '@fvilers/disable-react-devtools'
 import AlertTemplate from 'react-alert-template-basic';
 import "./style.css";
 import "leaflet/dist/leaflet.css";
@@ -19,6 +20,8 @@ const options = {
   type: 'success'
 }
 
+if(process.env.NODE_ENV === 'production') disableReactDevTools();
+
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <AuthContextProvider>
@@ -26,5 +29,5 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <App />
       </AlertProvider>
     </AuthContextProvider>
-  </React.StrictMode>,
-)
+  </React.StrictMode>
+);

@@ -135,3 +135,12 @@ body {
         height: 42vh;
     }
 }
+
+@media screen and (max-width: 1403px){
+    .footer-button {
+        padding-left: 20px !important;
+        padding-right: 20px !important;
+        padding-top: 5px !important;
+        padding-bottom: 0 !important
+    }
+}

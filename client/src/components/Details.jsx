@@ -29,6 +29,7 @@ function Details({ notes, setNotes, handleClickNearby, nearby, foundNearby, near
     return (
         <>
             <TextField
+                name='notes'
                 className='textfield'
                 id="outlined-textarea"
                 label="Add details"

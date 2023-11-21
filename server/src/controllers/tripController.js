@@ -145,7 +145,6 @@ const getAttractionDetails = async (req, res) => {
 const getCityName = async (req, res) => {
     const { lat, lng } = req.params;
     const nameResponse = await fetch(`https://secure.geonames.org/findNearbyPlaceNameJSON?lat=${lat}&lng=${lng}&cities=cities15000&username=${username}`);
-    //if response ok check
     const nameJson = await nameResponse.json();
     var name = '';
     if (nameJson.geonames && nameJson.geonames[0]) {
